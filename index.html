@@ -5,14 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Point 42 | Online</title>
     <style>
-        body, html { 
-            margin: 0; padding: 0; 
-            overflow: hidden; 
-            height: 100%; 
-            background: #000;
-        }
-
-        /* Контейнер для всего зала */
+        body, html { margin: 0; padding: 0; overflow: hidden; height: 100%; background: #000; }
+        
         #viewport {
             position: relative;
             width: 100%;
@@ -21,30 +15,26 @@
             overflow: hidden;
         }
 
-        #viewport:active { cursor: grabbing; }
-
-        /* Сама стена, которая крутится */
         #hall-wall {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            /* Твоя новая стена */
             background-image: url('images/hall1.png');
             background-repeat: repeat-x;
             background-size: auto 100%;
-            background-position: 0px 0px;
-            will-change: background-position;
+            will-change: transform;
         }
 
-        /* Объект двери */
         #door-object {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Центрируем */
-            height: 70%; /* Размер двери относительно высоты экрана */
-            pointer-events: auto; /* Чтобы на неё можно было кликнуть в будущем */
+            top: 53%; /* Чуть припустил вниз для центровки */
+            left: 0;
+            transform: translate(-50%, -50%);
+            height: 75%; 
+            display: block;
         }
 
         .ui-overlay {
@@ -56,7 +46,7 @@
             padding: 10px;
             font-family: 'Courier New', monospace;
             pointer-events: none;
-            text-transform: uppercase;
+            z-index: 10;
         }
     </style>
 </head>
@@ -64,8 +54,7 @@
 
     <div id="viewport">
         <div id="hall-wall">
-            <!-- Дверь находится внутри стены, чтобы двигаться вместе с фоном -->
-            <img src="images/door_maintenance.png" id="door-object" alt="Security Door">
+            <img src="images/door_maintenance.png" id="door-object" alt="Maintenance Door">
         </div>
         <div class="ui-overlay">
             Sector: Concourse | Auth: Piranio | Status: Active
@@ -80,13 +69,19 @@
         let startX;
         let currentPos = 0;
         
-        // Настройки: можно подкрутить, если дверь "уезжает" не туда
-        const doorOffset = 500; // Позиция двери в пикселях от начала
+        // Настройка: через сколько пикселей стена повторяется? 
+        // Если стена слишком часто или редко, поменяй это число (ширина твоей картинки hall1.png)
+        const roomCircumference = 3000; 
 
         function updatePositions() {
-            wall.style.backgroundPosition = `${currentPos}px 0px`;
-            // Двигаем дверь синхронно с фоном
-            door.style.left = `calc(50% + ${currentPos}px)`;
+            // Зацикливаем позицию, чтобы не крутить до бесконечности
+            // Теперь значение всегда будет в пределах от 0 до roomCircumference
+            let wrappedPos = currentPos % roomCircumference;
+            
+            wall.style.backgroundPosition = `${wrappedPos}px 0px`;
+            
+            // Ставим дверь ровно посередине одного из циклов
+            door.style.left = `${wrappedPos + (roomCircumference / 2)}px`;
         }
 
         window.addEventListener('mousedown', (e) => {
@@ -94,22 +89,16 @@
             startX = e.pageX;
         });
 
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
+        window.addEventListener('mouseup', () => isDragging = false);
 
         window.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            
             const x = e.pageX;
-            const walk = (x - startX); 
-            currentPos += walk;
+            currentPos += (x - startX);
             startX = x;
-            
             updatePositions();
         });
 
-        // Первоначальная установка
         updatePositions();
     </script>
 </body>
