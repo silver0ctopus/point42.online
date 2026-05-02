@@ -30,7 +30,7 @@
 
         #door-object {
             position: absolute;
-            top: 66%; /* Чуть припустил вниз для центровки */
+            top: 67%; /* Чуть припустил вниз для центровки */
             left: 0;
             transform: translate(-50%, -50%);
             height: 90%; 
@@ -81,7 +81,7 @@
             wall.style.backgroundPosition = `${wrappedPos}px 0px`;
             
             // Ставим дверь ровно посередине одного из циклов
-            door.style.left = `${wrappedPos + (roomCircumference / 2) - 100}px`;
+            door.style.left = `${wrappedPos + (roomCircumference / 2) - 250}px`;
         }
 
         window.addEventListener('mousedown', (e) => {
