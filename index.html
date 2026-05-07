@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>PsiMutants - Вход в Комплекс</title>
+    <!-- Подключаем A-Frame -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <style>
+        /* Стили для всплывающего окна авторизации */
+        #auth-ui {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #0ff;
+            border: 2px solid #0ff;
+            padding: 20px;
+            display: none; /* Скрыто по умолчанию */
+            z-index: 10;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            box-shadow: 0 0 15px #0ff;
+        }
+        input {
+            width: 80%;
+            margin: 10px 0;
+            background: #111;
+            border: 1px solid #0ff;
+            color: #fff;
+            padding: 5px;
+        }
+        button {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Интерфейс авторизации -->
+    <div id="auth-ui">
+        <h3>АВТОРИЗАЦИЯ</h3>
+        <input type="text" id="username" placeholder="Имя сигната...">
+        <input type="password" id="password" placeholder="Пароль...">
+        <br>
+        <button onclick="login('user')">ВОЙТИ</button>
+        <hr style="border: 0.5px solid #0ff; margin: 15px 0;">
+        <button onclick="login('guest')">ГОСТЕВОЙ ПРОПУСК</button>
+    </div>
+
+    <a-scene background="color: #000">
+        
+        <!-- Ресурсы (звуки, текстуры) -->
+        <a-assets>
+            <!-- Замени src на реальные ссылки, когда они будут на гитхабе -->
+            <audio id="lift-sound" src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav" preload="auto"></audio>
+        </a-assets>
+
+        <!-- 1. КАБИНА ЛИФТА -->
+        <!-- Создаем коробку, вывернутую внутрь (side: back) -->
+        <a-box position="0 1.5 0" width="3" height="3" depth="4" material="color: #222; side: back; metalness: 0.6; roughness: 0.4"></a-box>
+        
+        <!-- Пол и потолок -->
+        <a-plane position="0 0.01 0" rotation="-90 0 0" width="3" height="4" color="#111"></a-plane>
+        <a-plane position="0 2.99 0" rotation="90 0 0" width="3" height="4" color="#111"></a-plane>
+
+        <!-- 2. ДВЕРИ ЛИФТА (Стена №1) -->
+        <a-entity id="elevator-doors">
+            <a-plane id="left-door" position="-0.76 1.5 -1.98" width="1.5" height="3" color="#444" material="metalness: 0.8; roughness: 0.2"></a-plane>
+            <a-plane id="right-door" position="0.76 1.5 -1.98" width="1.5" height="3" color="#444" material="metalness: 0.8; roughness: 0.2"></a-plane>
+        </a-entity>
+
+        <!-- 3. ПАНЕЛЬ УПРАВЛЕНИЯ -->
+        <a-box position="1.45 1.4 -1" width="0.1" height="0.6" depth="0.4" color="#333">
+            <!-- Кнопка вызова -->
+            <a-sphere id="call-button" class="clickable" position="0.06 0 0" radius="0.08" color="red" 
+                      animation__click="property: material.color; from: #f00; to: #0f0; dur: 200; startEvents: click">
+            </a-sphere>
+        </a-box>
+        <a-entity text="value: AUTH; align: center; width: 2" position="1.35 1.8 -1" rotation="0 -90 0"></a-entity>
+
+        <!-- 4. ОСВЕЩЕНИЕ -->
+        <a-light type="ambient" color="#444"></a-light>
+        <a-light id="lift-light" type="point" position="0 2.5 0" intensity="0.8" color="#0ff"></a-light>
+
+        <!-- 5. КАМЕРА И КУРСОР -->
+        <a-entity id="rig" position="0 1.6 1">
+            <a-camera look-controls wasd-controls="enabled: false">
+                <a-entity cursor="fuse: false; rayOrigin: mouse;"
+                          raycaster="objects: .clickable">
+                </a-entity>
+            </a-camera>
+        </a-entity>
+
+    </a-scene>
+
+    <script>
+        const authUi = document.getElementById('auth-ui');
+        const callBtn = document.getElementById('call-button');
+        
+        // Открытие окна авторизации
+        callBtn.addEventListener('click', () => {
+            authUi.style.display = 'block';
+        });
+
+        // Функция входа
+        function login(type) {
+            const name = document.getElementById('username').value || "Гость";
+            
+            // Сохраняем данные для Лобби
+            localStorage.setItem('psi_user_type', type);
+            localStorage.setItem('psi_user_name', name);
+            
+            authUi.style.display = 'none';
+            openDoors();
+        }
+
+        // Анимация открытия дверей и переход
+        function openDoors() {
+            const leftDoor = document.getElementById('left-door');
+            const rightDoor = document.getElementById('right-door');
+
+            // Анимация разъезда дверей
+            leftDoor.setAttribute('animation', 'property: position; to: -2.2 1.5 -1.98; dur: 2000; easing: easeInQuad');
+            rightDoor.setAttribute('animation', 'property: position; to: 2.2 1.5 -1.98; dur: 2000; easing: easeInQuad');
+
+            // Через 2.5 секунды переходим в Лобби
+            setTimeout(() => {
+                // Здесь будет путь к твоему файлу лобби
+                window.location.href = 'lobby.html'; 
+            }, 2500);
+        }
+
+        // Эффект покачивания лифта при загрузке
+        window.onload = () => {
+            console.log("Лифт прибывает...");
+            // Можно добавить тряску камеры через анимацию rig
+        };
+    </script>
+</body>
+</html>
