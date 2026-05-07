@@ -1,1 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>PsiMutants - Лобби Космопорта</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <style>
+        /* Стили для всплывающих уведомлений */
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #0ff;
+            padding: 15px;
+            border: 1px solid #0ff;
+            font-family: 'Courier New', monospace;
+            display: none;
+            z-index: 100;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
 
+    <div id="msg-panel" class="info-panel"></div>
+
+    <a-scene background="color: #050505">
+        
+        <a-assets>
+            <!-- Здесь можно будет добавить текстуры стен или пола -->
+        </a-assets>
+
+        <!-- 1. ЦЕНТР: СТОЙКА РЕГИСТРАЦИИ -->
+        <a-entity position="0 0 0">
+            <a-cylinder radius="1.8" height="1" color="#333" metalness="0.5"></a-cylinder>
+            <a-cylinder radius="1.85" height="0.1" position="0 0.5 0" color="#0ff" opacity="0.5"></a-cylinder>
+            
+            <!-- NPC: Мира и Айра (заглушки) -->
+            <a-entity id="npc-mira" class="clickable" position="0.5 1.2 0" onclick="interact('Регистрация: Приветствуем в Точке 42!')">
+                <a-box width="0.4" height="1.6" depth="0.2" color="#0077ff"></a-box>
+                <a-text value="MIRA" align="center" position="0 1 0" width="3"></a-text>
+            </a-entity>
+
+            <a-entity id="npc-aira" class="clickable" position="-0.5 1.2 0" onclick="interact('Регистрация: Пожалуйста, соблюдайте порядок.')">
+                <a-box width="0.4" height="1.6" depth="0.2" color="#ff0077"></a-box>
+                <a-text value="AIRA" align="center" position="0 1 0" width="3"></a-text>
+            </a-entity>
+        </a-entity>
+
+        <!-- 2. СТЕНЫ ВОСЬМИУГОЛЬНИКА -->
+        <!-- Каждая стена удалена от центра на 7 метров -->
+        
+        <!-- Стена 1: Лифт (Выход) -->
+        <a-entity rotation="0 0 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" 
+                     onclick="window.location.href='index.html'">
+                <a-text value="ВЫХОД К ЛИФТУ" align="center" position="0 0 0.1" width="6"></a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 2: Телевизор и Газеты -->
+        <a-entity rotation="0 45 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#2a2a2a">
+                <a-box id="tv" class="clickable" position="-1.5 0.5 0.2" width="2" height="1.2" color="#000" onclick="interact('Экран: Чтение Манифеста...')"></a-box>
+                <a-box id="news" class="clickable" position="1.5 -0.5 0.2" width="1.2" height="0.8" color="#5a3a22" onclick="interact('Стенд: Свежая пресса получена.')"></a-box>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 3: Жилой отсек -->
+        <a-entity rotation="0 90 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Жилой отсек')">
+                <a-text value="ЖИЛОЙ ОТСЕК" align="center" position="0 0 0.1" width="6"></a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 4: Администрация -->
+        <a-entity rotation="0 135 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Администрация')">
+                <a-text value="АДМИНИСТРАЦИЯ" align="center" position="0 0 0.1" width="6"></a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 5: Внешний мир (Ворота) -->
+        <a-entity rotation="0 180 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#111" class="clickable" onclick="interact('ВНИМАНИЕ: Идут работы по терраформированию!')">
+                <a-text value="ВНЕШНИЙ МИР" align="center" position="0 0 0.1" width="6" color="red"></a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 6: Молл -->
+        <a-entity rotation="0 225 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Молл')">
+                <a-text value="МОЛЛ" align="center" position="0 0 0.1" width="6"></a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 7: Технические помещения -->
+        <a-entity rotation="0 270 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Тех. помещения')">
+                <a-text value="ТЕХ-ЗОНА" align="center" position="0 0 0.1" width="6"></a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Стена 8: Банкомат -->
+        <a-entity rotation="0 315 0">
+            <a-plane position="0 2.5 -7" width="6" height="5" color="#2a2a2a">
+                <a-box id="atm" class="clickable" position="0 0 0.2" width="1" height="1.8" color="#333" onclick="interact('Банкомат: Временно не работает.')">
+                    <a-plane position="0 0.4 0.51" width="0.8" height="0.4" color="#0ff"></a-plane>
+                </a-box>
+            </a-plane>
+        </a-entity>
+
+        <!-- ПОЛ -->
+        <a-circle rotation="-90 0 0" radius="10" color="#111" metalness="0.2" roughness="0.8"></a-circle>
+
+        <!-- СВЕТ -->
+        <a-light type="ambient" color="#555"></a-light>
+        <a-light type="point" position="0 4 0" intensity="1" color="#0ff"></a-light>
+
+        <!-- КАМЕРА -->
+        <a-entity id="rig" position="0 1.6 4">
+            <a-camera look-controls wasd-controls>
+                <a-entity cursor="fuse: false; rayOrigin: mouse;" raycaster="objects: .clickable"></a-entity>
+            </a-camera>
+        </a-entity>
+
+    </a-scene>
+
+    <script>
+        const msgPanel = document.getElementById('msg-panel');
+        
+        // Получаем данные из localStorage (из страницы index.html)
+        const userType = localStorage.getItem('psi_user_type') || 'guest';
+        const userName = localStorage.getItem('psi_user_name') || 'Неизвестный';
+
+        console.log(`Зашел пользователь: ${userName}, тип: ${userType}`);
+
+        function interact(text) {
+            msgPanel.style.display = 'block';
+            msgPanel.innerText = text;
+            setTimeout(() => { msgPanel.style.display = 'none'; }, 3000);
+        }
+
+        function checkAccess(locationName) {
+            if (userType === 'guest') {
+                interact(`Доступ в ${locationName} закрыт. Пожалуйста, пройдите регистрацию у Миры.`);
+            } else {
+                interact(`Доступ разрешен. Переход в ${locationName}...`);
+                // Здесь будет window.location.href = 'next_scene.html';
+            }
+        }
+    </script>
+</body>
+</html>
