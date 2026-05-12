@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    
+    <title>Point 42 - Лобби Космопорта</title>
+    <!-- A-Frame (основной) -->
+<script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+
+
     <meta charset="utf-8">
-    <title>Point 42 - Лобби Космопорта 1</title>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    
+    
     <style>
         /* Стили для всплывающих уведомлений */
         .info-panel {
@@ -26,7 +32,7 @@
 
     <div id="msg-panel" class="info-panel"></div>
 
-    <a-scene background="color: #050505">
+    <a-scene background="color: #050505" physics="debug: false;">
         
         <a-assets>
             <!-- Здесь можно будет добавить текстуры стен или пола -->
@@ -34,10 +40,11 @@
 
         <!-- 1. ЦЕНТР: СТОЙКА РЕГИСТРАЦИИ -->
         <a-entity position="0 0 0">
-            <a-cylinder radius="1.8" height="1" color="#333" metalness="0.5"></a-cylinder>
-            <a-cylinder radius="1.85" height="0.1" position="0 0.5 0" color="#0ff" opacity="0.5"></a-cylinder>
+            <a-cylinder static-body radius="1.8" height="4" color="#333" metalness="0.5"></a-cylinder>
+            <a-cylinder static-body radius="1.85" height="0" position="0 0.5 0" color="#0ff" opacity="0.5"></a-cylinder>
             
-            <!-- NPC: Мира и Айра (заглушки) -->
+            <!-- NPC: Мира и Айра (заглушки) --> 
+            <!--
             <a-entity id="npc-mira" class="clickable" position="0.5 1.2 0" onclick="interact('Регистрация: Приветствуем в Точке 42!')">
                 <a-box width="0.4" height="1.6" depth="0.2" color="#0077ff"></a-box>
                 <a-text value="MIRA" align="center" position="0 1 0" width="3"></a-text>
@@ -47,86 +54,260 @@
                 <a-box width="0.4" height="1.6" depth="0.2" color="#ff0077"></a-box>
                 <a-text value="AIRA" align="center" position="0 1 0" width="3"></a-text>
             </a-entity>
-        </a-entity>
+            </a-entity>
+            -->
 
         <!-- 2. СТЕНЫ ВОСЬМИУГОЛЬНИКА -->
         <!-- Каждая стена удалена от центра на 7 метров -->
         
         <!-- Стена 1: Лифт (Выход) -->
-        <a-entity rotation="0 0 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" 
-                     onclick="window.location.href='index.html'">
-                <a-text value="ВЫХОД К ЛИФТУ" align="center" position="0 0 0.1" width="6"></a-text>
-            </a-plane>
-        </a-entity>
+    <a-entity rotation="0 0 0">
+        <a-plane position="0 3.5 -12" width="10" height="7" color="#2a2a2a">
+            <a-plane id="door1" position="0 -1 0.01" width="3" height="5" color="#AAA" 
+            material="metalness: 0.8; roughness: 0.2"></a-plane>
+        
+            <!-- Двери -->
+            <a-plane id="left-door1" position="-0.75 -1 0.02" width="1.5" height="5" color="rgb(255,0,0)"></a-plane>
+            <a-plane id="right-door1" position="0.75 -1 0.02" width="1.5" height="5" color="rgb(255,0,0)"></a-plane>
+        
+            <!-- Панели, куда прячутся двери -->
+            <a-plane id="left-door-hide1" position="-2.25 -1 0.03" width="1.5" height="5" color="#2a2a2a"></a-plane>
+            <a-plane id="right-door-hide1" position="2.25 -1 0.03" width="1.5" height="5" color="#2a2a2a"></a-plane>
+        
+            <!-- Исправленная кнопка -->
+            <a-circle class="clickable door-button" 
+            position="2.2 -1 0.04" radius="0.1" color="red"
+            data-left="left-door1" 
+            data-right="right-door1" 
+            data-url="index.html">
+            </a-circle> 
+
+            <a-text value="EXIT" align="center" position="0 2 0.01" width="6" side="double"></a-text>
+        </a-plane>
+    </a-entity>
 
         <!-- Стена 2: Телевизор и Газеты -->
         <a-entity rotation="0 45 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#2a2a2a">
-                <a-box id="tv" class="clickable" position="-1.5 0.5 0.2" width="2" height="1.2" color="#000" onclick="interact('Экран: Чтение Манифеста...')"></a-box>
-                <a-box id="news" class="clickable" position="1.5 -0.5 0.2" width="1.2" height="0.8" color="#5a3a22" onclick="interact('Стенд: Свежая пресса получена.')"></a-box>
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#2a2a2a">
+                <a-box id="tv" class="clickable" position="-1.5 0.5 0.2" width="2" height="1.2" color="#000" 
+                onclick="interact('Экран: Чтение Манифеста...')"></a-box>
+                <a-box id="news" class="clickable" position="1.5 -0.5 0.2" width="1.2" height="0.8" color="#5a3a22" 
+                onclick="interact('Стенд: Свежая пресса получена.')"></a-box>
             </a-plane>
         </a-entity>
 
         <!-- Стена 3: Жилой отсек -->
         <a-entity rotation="0 90 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Жилой отсек')">
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#222" class="clickable" 
+            onclick="checkAccess('Жилой отсек')">
                 <a-text value="ЖИЛОЙ ОТСЕК" align="center" position="0 0 0.1" width="6"></a-text>
             </a-plane>
         </a-entity>
 
         <!-- Стена 4: Администрация -->
         <a-entity rotation="0 135 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Администрация')">
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#222" class="clickable" 
+            onclick="checkAccess('Администрация')">
                 <a-text value="АДМИНИСТРАЦИЯ" align="center" position="0 0 0.1" width="6"></a-text>
             </a-plane>
         </a-entity>
 
         <!-- Стена 5: Внешний мир (Ворота) -->
         <a-entity rotation="0 180 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#111" class="clickable" onclick="interact('ВНИМАНИЕ: Идут работы по терраформированию!')">
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#111" class="clickable" 
+            onclick="interact('ВНИМАНИЕ: Идут работы по терраформированию!')">
                 <a-text value="ВНЕШНИЙ МИР" align="center" position="0 0 0.1" width="6" color="red"></a-text>
             </a-plane>
         </a-entity>
 
         <!-- Стена 6: Молл -->
         <a-entity rotation="0 225 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Молл')">
-                <a-text value="МОЛЛ" align="center" position="0 0 0.1" width="6"></a-text>
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#2a2a2a">
+                <a-plane id="door6" position="0 -1 0.01" width="3" height="5" color="#AAA" 
+                material="metalness: 0.8; roughness: 0.2"></a-plane>
+            
+                <!-- Двери -->
+                <a-plane id="left-door6" position="-0.75 -1 0.02" width="1.5" height="5" color="rgb(255,0,0)"></a-plane>
+                <a-plane id="right-door6" position="0.75 -1 0.02" width="1.5" height="5" color="rgb(255,0,0)"></a-plane>
+            
+                <!-- Панели, куда прячутся двери -->
+                <a-plane id="left-door-hide6" position="-2.25 -1 0.03" width="1.5" height="5" color="#2a2a2a"></a-plane>
+                <a-plane id="right-door-hide6" position="2.25 -1 0.03" width="1.5" height="5" color="#2a2a2a"></a-plane>
+            
+                <!-- Исправленная кнопка -->
+                <a-circle class="clickable door-button" 
+                position="2.2 -1 0.04" radius="0.1" color="red"
+                data-left="left-door6" 
+                data-right="right-door6" 
+                data-url="mall.html">
+                </a-circle> 
+    
+                <a-text value="MALL" align="center" position="0 2 0.01" width="6" side="double"></a-text>
             </a-plane>
         </a-entity>
 
         <!-- Стена 7: Технические помещения -->
         <a-entity rotation="0 270 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#222" class="clickable" onclick="checkAccess('Тех. помещения')">
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#222" class="clickable" 
+            onclick="checkAccess('Тех. помещения')">
                 <a-text value="ТЕХ-ЗОНА" align="center" position="0 0 0.1" width="6"></a-text>
             </a-plane>
         </a-entity>
 
         <!-- Стена 8: Банкомат -->
         <a-entity rotation="0 315 0">
-            <a-plane position="0 2.5 -7" width="6" height="5" color="#2a2a2a">
-                <a-box id="atm" class="clickable" position="0 0 0.2" width="1" height="1.8" color="#333" onclick="interact('Банкомат: Временно не работает.')">
+            <a-plane position="0 3.5 -12" width="10" height="7" color="#2a2a2a">
+                <a-box id="atm" class="clickable" position="0 0 0.2" width="1" height="1.8" color="#333" 
+                onclick="interact('Банкомат: Временно не работает.')">
                     <a-plane position="0 0.4 0.51" width="0.8" height="0.4" color="#0ff"></a-plane>
                 </a-box>
             </a-plane>
         </a-entity>
 
         <!-- ПОЛ -->
-        <a-circle rotation="-90 0 0" radius="10" color="#111" metalness="0.2" roughness="0.8"></a-circle>
+        <a-circle static-body="shape: mesh" 
+          rotation="-90 0 0" 
+          radius="13" 
+          color="#BDB76B" 
+          metalness="0.2" 
+          roughness="0.8">
+        </a-circle>
 
         <!-- СВЕТ -->
         <a-light type="ambient" color="#555"></a-light>
         <a-light type="point" position="0 4 0" intensity="1" color="#0ff"></a-light>
 
         <!-- КАМЕРА -->
-        <a-entity id="rig" position="0 1.6 4">
-            <a-camera look-controls wasd-controls>
-                <a-entity cursor="fuse: false; rayOrigin: mouse;" raycaster="objects: .clickable"></a-entity>
-            </a-camera>
+        <a-entity id="rig" circular-boundary="radius: 11.2">
+            <!--wasd-controls теперь на rig, чтобы не было "тряски" при столкновении -->
+            <a-entity camera 
+                      position="0 3 0" 
+                      look-controls="pointerLockEnabled: true" 
+                      wasd-controls="acceleration: 65">
+                
+                <!-- КУРСОР-ПЕРЕКРЕСТИЕ -->
+                <a-entity cursor="fuse: false;"
+                          position="0 0 -1"
+                          geometry="primitive: ring; radiusInner: 0.00; radiusOuter: 0.01"
+                          material="color: white; shader: flat"
+                          raycaster="objects: .clickable">
+                        <!-- Анимация при наведении на .clickable -->
+                            <a-animation begin="mouseenter" easing="ease-in" attribute="scale"
+                            fill="forwards" from="1 1 1" to="1.5 1.5 1.5" dur="150"></a-animation>
+                        <!-- Анимация при уходе с объекта -->
+                        <a-animation begin="mouseleave" easing="ease-in" attribute="scale"
+                        fill="forwards" from="1.5 1.5 1.5" to="1 1 1" dur="150"></a-animation>
+                </a-entity>
+                
+            </a-entity>
         </a-entity>
 
     </a-scene>
+
+    <!--Работа двери-->
+    <script>
+        window.addEventListener('load', () => {
+            // Находим все кнопки дверей по классу
+            const buttons = document.querySelectorAll('.door-button');
+    
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Если кнопка уже нажата, ничего не делаем
+                    if (this.getAttribute('data-active') === 'true') return;
+                    this.setAttribute('data-active', 'true');
+    
+                    // Смена цвета кнопки (визуальный отклик)
+                    this.setAttribute('material', 'color', '#0f0');
+    
+                    // Получаем ID дверей и ссылку из атрибутов нажатой кнопки
+                    const leftId = this.getAttribute('data-left');
+                    const rightId = this.getAttribute('data-right');
+                    const targetUrl = this.getAttribute('data-url');
+    
+                    openSpecificDoors(leftId, rightId, targetUrl);
+                });
+            });
+    
+            function openSpecificDoors(leftId, rightId, url) {
+                const leftDoor = document.getElementById(leftId);
+                const rightDoor = document.getElementById(rightId);
+    
+                if (leftDoor && rightDoor) {
+                    // Запускаем анимацию разъезда
+                    leftDoor.setAttribute('animation', 'property: position; to: -2.25 -1 0.02; dur: 2000; easing: easeInQuad');
+                    rightDoor.setAttribute('animation', 'property: position; to: 2.25 -1 0.02; dur: 2000; easing: easeInQuad');
+    
+                    // Переход по ссылке
+                    setTimeout(() => {
+                        window.location.href = url + "?from=" + window.location.pathname.split('/').pop();
+                    }, 2500);
+                }
+            }
+        });
+    </script>
+
+    <!--Ограничитель территории камеры-->
+    <script>
+        AFRAME.registerComponent('circular-boundary', {
+  schema: {
+    radius: {type: 'number', default: 12.5}
+  },
+
+  tick: function () {
+    const cameraEl = this.el.querySelector('[camera]');
+    if (!cameraEl) return;
+
+    // Получаем мировые координаты камеры (где она реально в пространстве)
+    const worldPos = new THREE.Vector3();
+    cameraEl.object3D.getWorldPosition(worldPos);
+
+    // Считаем расстояние от центра пола (0,0) до камеры по горизонтали
+    const dist = Math.sqrt(worldPos.x * worldPos.x + worldPos.z * worldPos.z);
+
+    if (dist > this.data.radius) {
+      // Вычисляем, насколько камера вылетела за радиус
+      const ratio = this.data.radius / dist;
+      
+      // Находим, в какой позиции должен стоять rig, чтобы камера вернулась в круг
+      // Это хитрая математика компенсации смещения камеры внутри rig
+      const newX = worldPos.x * ratio;
+      const newZ = worldPos.z * ratio;
+      
+      const diffX = newX - worldPos.x;
+      const diffZ = newZ - worldPos.z;
+
+      // Сдвигаем rig так, чтобы камера оказалась на границе
+      this.el.object3D.position.x += diffX;
+      this.el.object3D.position.z += diffZ;
+    }
+  }
+});
+      </script>
+
+<script>
+    window.addEventListener('load', () => {
+    const rig = document.getElementById('rig');
+    const urlParams = new URLSearchParams(window.location.search);
+    const source = urlParams.get('from');
+
+    // Таблица координат для каждой точки входа
+    const spawnPoints = {
+        'index.html': { pos: '0 0 -11', rot: '0 180 0' },   // Выход из лифта (прямо)
+        'default': { pos: '0 0 -11', rot: '0 180 0' },     // По умолчанию (в центре)
+        'lab.html': { pos: '10 0 0', rot: '0 90 0' },   // Выход из лабы (справа)
+    };
+
+    const point = spawnPoints[source] || spawnPoints['default'];
+
+    // Устанавливаем позицию
+    rig.setAttribute('position', point.pos);
+    
+    // Устанавливаем поворот (чтобы игрок смотрел ВНУТРЬ комнаты, а не в стену)
+    rig.setAttribute('rotation', point.rot);
+    
+    console.log("Игрок появился в точке:", source || "стандарт");
+});
+</script>
 
     <script>
         const msgPanel = document.getElementById('msg-panel');
@@ -152,5 +333,6 @@
             }
         }
     </script>
+
 </body>
 </html>
