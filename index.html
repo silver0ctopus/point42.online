@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <title>Point 42 - Вход в Комплекс 2</title>
+    <title>Point 42 - Вход в Комплекс</title>
     <!-- Подключаем A-Frame -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <style>
@@ -57,10 +57,12 @@
     <a-scene background="color: #000">
         
         <!-- Ресурсы (звуки, текстуры) -->
-        <a-assets>
-            <!-- Замени src на реальные ссылки, когда они будут на гитхабе -->
+        <!-- 
+            <a-assets>
+             Замени src на реальные ссылки, когда они будут на гитхабе 
             <audio id="lift-sound" src="https://cdn.aframe.io/basic-guide/audio/backgroundnoise.wav" preload="auto"></audio>
-        </a-assets>
+            </a-assets>
+        --> 
 
         <!-- 1. КАБИНА ЛИФТА -->
         <!-- Создаем коробку, вывернутую внутрь (side: back) -->
@@ -77,13 +79,15 @@
         </a-entity>
 
         <!-- 3. ПАНЕЛЬ УПРАВЛЕНИЯ -->
-        <a-box position="1.45 1.85 -1" width="0.1" height="0.6" depth="0.4" color="#333">
+        <a-entity rotation="0 270 0">
+        <a-plane position="-1.25 1.85 -1.49" width="0.5" height="0.6" color="#333">
             <!-- Кнопка вызова -->
             <a-sphere id="call-button" class="clickable" position="0.06 0 0" radius="0.08" color="red" 
                       animation__click="property: material.color; from: #f00; to: #0f0; dur: 200; startEvents: click">
             </a-sphere>
-        </a-box>
-        <a-entity text="value: AUTH; align: center; width: 2" position="1.35 1.8 -1" rotation="0 -90 0"></a-entity>
+        </a-plane>
+        </a-entity>
+        <a-entity text="value: ENTER; align: center; width: 2" position="1.32 1.8 -1" rotation="0 -90 0"></a-entity>
 
         <!-- 4. ОСВЕЩЕНИЕ -->
         <a-light type="ambient" color="#444"></a-light>
@@ -133,7 +137,7 @@
             // Через 2.5 секунды переходим в Лобби
             setTimeout(() => {
                 // Здесь будет путь к твоему файлу лобби
-                window.location.href = 'lobby.html'; 
+                window.location.href = 'lobby.html' + "?from=" + window.location.pathname.split('/').pop(); 
             }, 2500);
         }
 
