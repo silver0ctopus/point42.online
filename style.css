@@ -1,1 +1,168 @@
-
+/* Стили для всплывающих уведомлений */
+.info-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #0ff;
+    padding: 15px;
+    border: 1px solid #0ff;
+    font-family: 'Courier New', monospace;
+    display: none;
+    z-index: 100;
+    pointer-events: none;
+}
+/* Обнуление для корректного наложения HUD */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  
+  /* Контейнер HUD поверх A-Frame */
+  #game-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; /* Главное — быть выше, чем canvas от a-frame */
+    pointer-events: none; /* Чтобы мы могли кликать сквозь пустые зоны HUD по 3D сцене */
+    box-sizing: border-box;
+    padding: 20px;
+  }
+  
+  /* Блок игрока в углу */
+  .player-status-block {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #00ffcc; /* Киберпанк/слай-фай зеленый, можешь изменить под свой бренд */
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+    pointer-events: auto; /* Возвращаем кликабельность элементам интерфейса */
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .player-status-block:hover {
+    background: rgba(0, 255, 204, 0.15);
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  }
+  
+  /* Рамка аватарки */
+  .avatar-frame {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    background: #222;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #333, #555);
+  }
+  
+  /* Имя игрока */
+  .player-name {
+    color: #fff;
+    font-size: 14px;
+    margin-top: 6px;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+  }
+  
+  /* Плейсхолдер под здоровье */
+  .health-bar-container-placeholder {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-top: 6px;
+    border-radius: 4px;
+  }
+  
+  /* --- Стили Модального окна (Инвентаря) --- */
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 20; /* Выше чем HUD */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+  
+  .modal-overlay.hidden {
+    display: none;
+    opacity: 0;
+  }
+  
+  .modal-content {
+    background: #1a1a1a;
+    border: 2px solid #00ffcc;
+    border-radius: 12px;
+    padding: 30px;
+    width: 400px;
+    position: relative;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 28px;
+    cursor: pointer;
+  }
+  
+  .close-btn:hover {
+    color: #00ffcc;
+  }
+  
+  .player-info-detailed {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .avatar-frame.large {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .player-details h3 {
+    margin: 0 0 10px 0;
+    color: #00ffcc;
+  }
+  .player-details p {
+    margin: 5px 0;
+    color: #ccc;
+  }
