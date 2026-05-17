@@ -191,3 +191,104 @@ document.addEventListener('DOMContentLoaded', () => {
   
     loadUserData();
   });
+
+
+// ==========================================
+// СЕКЦИЯ: ИНИЦИАЛИЗАЦИЯ И АВТОРИЗАЦИЯ SUPABASE
+// ==========================================
+
+// Предполагается, что supabase уже инициализирован ранее:
+// const supabase = supabase.createClient('URL', 'KEY');
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await checkUserSession();
+});
+
+/**
+ * Проверяет текущую сессию пользователя и запускает обновление интерфейса
+ */
+async function checkUserSession() {
+    try {
+        // 1. Получаем текущую сессию
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) throw sessionError;
+
+        // Если сессии нет — отправляем пользователя на стартовую локацию «Лифт»
+        if (!session) {
+            console.warn("Пользователь не авторизован. Перенаправление в Лифт...");
+            window.location.href = 'index.html'; 
+            return;
+        }
+
+        const user = session.user;
+        console.log("Успешная сессия для UID:", user.id);
+
+        // 2. Получаем никнейм (Сначала проверяем таблицу профилей, затем metadata)
+        let username = await fetchUserProfile(user.id);
+        
+        if (!username) {
+            // Фолбэк: если в БД пусто, пробуем достать из метаданных регистрации
+            username = user.user_metadata?.username || user.email.split('@')[0];
+        }
+
+        // 3. Обновляем интерфейс
+        updateHUD(username);
+
+    } catch (error) {
+        console.error("Ошибка при проверке сессии:", error.message);
+        // В случае критической ошибки тоже можно редиректить
+        // window.location.href = 'index.html';
+    }
+}
+
+/**
+ * Запрос к таблице профилей в БД Supabase
+ */
+async function fetchUserProfile(userId) {
+    try {
+        // Предполагаем, что таблица называется 'profiles', а колонка с ником — 'username'
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', userId)
+            .single();
+
+        if (error) {
+            // Если таблицы нет или запись не найдена, это обработается в блоке catch
+            throw error;
+        }
+
+        return data?.username;
+    } catch (err) {
+        console.log("Дополнительные данные профиля не найдены в таблице profiles, используем метаданные.");
+        return null;
+    }
+}
+
+// ==========================================
+// СЕКЦИЯ: УПРАВЛЕНИЕ HUD И ИНТЕРФЕЙСОМ
+// ==========================================
+
+/**
+ * Внедряет данные пользователя в HTML-элементы HUD и модального окна
+ */
+function updateHUD(username) {
+    // Селекторы подставьте в соответствии с вашим HTML
+    const hudNicknameEl = document.querySelector('#hud-nickname'); // Элемент в углу экрана
+    const modalNicknameEl = document.querySelector('#modal-profile-name'); // Элемент внутри 2D инвентаря
+
+    if (hudNicknameEl) {
+        hudNicknameEl.textContent = username;
+    } else {
+        console.warn("Элемент HUD для никнейма не найден в DOM");
+    }
+
+    if (modalNicknameEl) {
+        modalNicknameEl.textContent = username;
+    }
+    
+    // Здесь же в будущем можно будет запустить рендер кастомной аватарки, 
+    // если её URL будет храниться в профиле:
+    // if (avatarUrl) { document.querySelector('#hud-avatar').src = avatarUrl; }
+}
