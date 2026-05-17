@@ -262,26 +262,20 @@ async function checkUserSession() {
  */
 async function fetchUserProfile(userId) {
     try {
-        console.log("Запрос в профили для UID:", userId);
-        
         const { data, error } = await db
             .from('profiles')
-            .select('login') // Проверьте, что в БД колонка именно маленькими буквами 'login'
+            .select('login')
             .eq('id', userId)
             .single();
 
-        if (error) {
-            // Если Supabase вернул ошибку, мы её залогируем
-            console.error("Supabase вернул ошибку при запросе профиля:", error);
-            throw error;
-        }
+        if (error) throw error;
 
-        console.log("Данные из таблицы profiles успешно получены:", data);
+        // Возвращаем полученный логин (например, 'Piranita')
         return data?.login; 
 
     } catch (err) {
-        // Логируем ЛЮБУЮ ошибку (сетевую, RLS, синтаксическую)
-        console.error("Критическая ошибка в fetchUserProfile:", err);
+        // Оставляем этот лог! Он спасет кучу времени, если база данных по какой-то причине станет недоступна
+        console.error("Ошибка при получении профиля из таблицы profiles:", err.message);
         return null;
     }
 }
