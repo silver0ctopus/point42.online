@@ -193,6 +193,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
+
+// ==========================================
+// ИНИЦИАЛИЗАЦИЯ SUPABASE CLIENT
+// ==========================================
+
+const SUPABASE_URL = 'https://hjgeubtprprvnmszjbaj.supabase.co'; // Ваш URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqZ2V1YnRwcnBydm5tc3pqYmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTEyMTUsImV4cCI6MjA5NDMyNzIxNX0.j5WdnROT426wTMzjI6kMWhrU_pnPqteIboGK6km2pn0'; // Ваш ключ
+
+// Использование window.supabase гарантирует, что мы вызываем метод класса из CDN,
+// а результат (клиент) записываем в нашу глобальную переменную
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+
 // ==========================================
 // СЕКЦИЯ: ИНИЦИАЛИЗАЦИЯ И АВТОРИЗАЦИЯ SUPABASE
 // ==========================================
