@@ -8,25 +8,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
     
     
-    <style>
-        /* Стили для всплывающих уведомлений */
-        .info-panel {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: #0ff;
-            padding: 15px;
-            border: 1px solid #0ff;
-            font-family: 'Courier New', monospace;
-            display: none;
-            z-index: 100;
-            pointer-events: none;
-        }
-    </style>
 </head>
 <body>
 
@@ -43,20 +27,6 @@
             <a-cylinder static-body radius="1.8" height="4" color="#333" metalness="0.5"></a-cylinder>
             <a-cylinder static-body radius="1.85" height="0" position="0 0.5 0" color="#0ff" opacity="0.5"></a-cylinder>
             
-            <!-- NPC: Мира и Айра (заглушки) --> 
-            <!--
-            <a-entity id="npc-mira" class="clickable" position="0.5 1.2 0" onclick="interact('Регистрация: Приветствуем в Точке 42!')">
-                <a-box width="0.4" height="1.6" depth="0.2" color="#0077ff"></a-box>
-                <a-text value="MIRA" align="center" position="0 1 0" width="3"></a-text>
-            </a-entity>
-
-            <a-entity id="npc-aira" class="clickable" position="-0.5 1.2 0" onclick="interact('Регистрация: Пожалуйста, соблюдайте порядок.')">
-                <a-box width="0.4" height="1.6" depth="0.2" color="#ff0077"></a-box>
-                <a-text value="AIRA" align="center" position="0 1 0" width="3"></a-text>
-            </a-entity>
-            </a-entity>
-            -->
-
         <!-- 2. СТЕНЫ ВОСЬМИУГОЛЬНИКА -->
         <!-- Каждая стена удалена от центра на 7 метров -->
         
@@ -206,167 +176,39 @@
 
     <!-- Игровой HUD (Верхний слой) -->
 <div id="game-hud">
-  <!-- Блок игрока в правом верхнем углу -->
-  <div class="player-status-block" id="hud-avatar-btn" title="Открыть инвентарь (I)">
-    <div class="avatar-frame">
-      <!-- Здесь позже будет <img> с аватаркой -->
-      <div class="avatar-placeholder"></div>
-    </div>
-    <div class="player-name" id="hud-player-name">Загрузка...</div>
-    <!-- Место для будущего прогресс-бара здоровья -->
-    <div class="health-bar-container-placeholder"></div>
-  </div>
-</div>
-
-<!-- Модальное окно информации об игроке (Инвентарь) -->
-<div id="inventory-modal" class="modal-overlay hidden">
-  <div class="modal-content">
-    <button class="close-btn" id="close-inventory-btn">&times;</button>
-    
-    <h2>Информация о игроке</h2>
-    <div class="player-info-detailed">
-      <div class="avatar-frame large">
+    <!-- Блок игрока в правом верхнем углу -->
+    <div class="player-status-block" id="hud-avatar-btn" title="Открыть инвентарь (I)">
+      <div class="avatar-frame">
+        <!-- Здесь позже будет <img> с аватаркой -->
         <div class="avatar-placeholder"></div>
       </div>
-      <div class="player-details">
-        <h3 id="modal-player-name">Имя Игрока</h3>
-        <p>Статус: В сети</p>
-        <p>Локация: Лобби</p>
-        <!-- Здесь позже будет снаряжение -->
+      <div class="player-name" id="hud-player-name">Загрузка...</div>
+      <!-- Место для будущего прогресс-бара здоровья -->
+      <div class="health-bar-container-placeholder"></div>
+    </div>
+  </div>
+  
+  <!-- Модальное окно информации об игроке (Инвентарь) -->
+  <div id="inventory-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <button class="close-btn" id="close-inventory-btn">&times;</button>
+      
+      <h2>Информация о игроке</h2>
+      <div class="player-info-detailed">
+        <div class="avatar-frame large">
+          <div class="avatar-placeholder"></div>
+        </div>
+        <div class="player-details">
+          <h3 id="modal-player-name">Имя Игрока</h3>
+          <p>Статус: В сети</p>
+          <p>Локация: Лобби</p>
+          <!-- Здесь позже будет снаряжение -->
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-    <!--Работа двери-->
-    <script>
-        window.addEventListener('load', () => {
-            // Находим все кнопки дверей по классу
-            const buttons = document.querySelectorAll('.door-button');
     
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Если кнопка уже нажата, ничего не делаем
-                    if (this.getAttribute('data-active') === 'true') return;
-                    this.setAttribute('data-active', 'true');
-    
-                    // Смена цвета кнопки (визуальный отклик)
-                    this.setAttribute('material', 'color', '#0f0');
-    
-                    // Получаем ID дверей и ссылку из атрибутов нажатой кнопки
-                    const leftId = this.getAttribute('data-left');
-                    const rightId = this.getAttribute('data-right');
-                    const targetUrl = this.getAttribute('data-url');
-    
-                    openSpecificDoors(leftId, rightId, targetUrl);
-                });
-            });
-    
-            function openSpecificDoors(leftId, rightId, url) {
-                const leftDoor = document.getElementById(leftId);
-                const rightDoor = document.getElementById(rightId);
-    
-                if (leftDoor && rightDoor) {
-                    // Запускаем анимацию разъезда
-                    leftDoor.setAttribute('animation', 'property: position; to: -2.25 -1 0.02; dur: 2000; easing: easeInQuad');
-                    rightDoor.setAttribute('animation', 'property: position; to: 2.25 -1 0.02; dur: 2000; easing: easeInQuad');
-    
-                    // Переход по ссылке
-                    setTimeout(() => {
-                        window.location.href = url + "?from=" + window.location.pathname.split('/').pop();
-                    }, 2500);
-                }
-            }
-        });
-    </script>
-
-    <!--Ограничитель территории камеры-->
-    <script>
-        AFRAME.registerComponent('circular-boundary', {
-  schema: {
-    radius: {type: 'number', default: 12.5}
-  },
-
-  tick: function () {
-    const cameraEl = this.el.querySelector('[camera]');
-    if (!cameraEl) return;
-
-    // Получаем мировые координаты камеры (где она реально в пространстве)
-    const worldPos = new THREE.Vector3();
-    cameraEl.object3D.getWorldPosition(worldPos);
-
-    // Считаем расстояние от центра пола (0,0) до камеры по горизонтали
-    const dist = Math.sqrt(worldPos.x * worldPos.x + worldPos.z * worldPos.z);
-
-    if (dist > this.data.radius) {
-      // Вычисляем, насколько камера вылетела за радиус
-      const ratio = this.data.radius / dist;
-      
-      // Находим, в какой позиции должен стоять rig, чтобы камера вернулась в круг
-      // Это хитрая математика компенсации смещения камеры внутри rig
-      const newX = worldPos.x * ratio;
-      const newZ = worldPos.z * ratio;
-      
-      const diffX = newX - worldPos.x;
-      const diffZ = newZ - worldPos.z;
-
-      // Сдвигаем rig так, чтобы камера оказалась на границе
-      this.el.object3D.position.x += diffX;
-      this.el.object3D.position.z += diffZ;
-    }
-  }
-});
-      </script>
-
-<script>
-    window.addEventListener('load', () => {
-    const rig = document.getElementById('rig');
-    const urlParams = new URLSearchParams(window.location.search);
-    const source = urlParams.get('from');
-
-    // Таблица координат для каждой точки входа
-    const spawnPoints = {
-        'index.html': { pos: '0 0 -11', rot: '0 180 0' },   // Выход из лифта (прямо)
-        'default': { pos: '0 0 -11', rot: '0 180 0' },     // По умолчанию (в центре)
-        'lab.html': { pos: '10 0 0', rot: '0 90 0' },   // Выход из лабы (справа)
-    };
-
-    const point = spawnPoints[source] || spawnPoints['default'];
-
-    // Устанавливаем позицию
-    rig.setAttribute('position', point.pos);
-    
-    // Устанавливаем поворот (чтобы игрок смотрел ВНУТРЬ комнаты, а не в стену)
-    rig.setAttribute('rotation', point.rot);
-    
-    console.log("Игрок появился в точке:", source || "стандарт");
-});
-</script>
-
-    <script>
-        const msgPanel = document.getElementById('msg-panel');
-        
-        // Получаем данные из localStorage (из страницы index.html)
-        const userType = localStorage.getItem('psi_user_type') || 'guest';
-        const userName = localStorage.getItem('psi_user_name') || 'Неизвестный';
-
-        console.log(`Зашел пользователь: ${userName}, тип: ${userType}`);
-
-        function interact(text) {
-            msgPanel.style.display = 'block';
-            msgPanel.innerText = text;
-            setTimeout(() => { msgPanel.style.display = 'none'; }, 3000);
-        }
-
-        function checkAccess(locationName) {
-            if (userType === 'guest') {
-                interact(`Доступ в ${locationName} закрыт. Пожалуйста, пройдите регистрацию у Миры.`);
-            } else {
-                interact(`Доступ разрешен. Переход в ${locationName}...`);
-                // Здесь будет window.location.href = 'next_scene.html';
-            }
-        }
-    </script>
-
+<script src="app.js"></script>
 </body>
 </html>
