@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Point 42 - Регистрация</title>
+    <!-- Подключаем Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { margin: 0; font-family: monospace; background: #050505; color: #00ff00; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .overlay-card { background: #111; border: 2px solid #00ff00; padding: 20px; width: 300px; box-shadow: 0 0 20px #00ff00; }
+        h2 { text-align: center; text-transform: uppercase; }
+        input { width: 100%; padding: 10px; margin: 10px 0; background: #000; border: 1px solid #00ff00; color: #00ff00; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #00ff00; color: #000; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        button:hover { background: #008800; }
+        #status { margin-top: 10px; font-size: 0.8em; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="overlay-card">
+    <h2>Регистрация терминала</h2>
+    <input type="text" id="reg-login" placeholder="ПОЗЫВНОЙ (LOGIN)">
+    <input type="email" id="reg-email" placeholder="E-MAIL">
+    <input type="password" id="reg-password" placeholder="ПАРОЛЬ">
+    <button onclick="signUp()">Зарегистрироваться</button>
+    <div id="status"></div>
+</div>
+
+<script>
+    // ВСТАВЬ СВОИ ДАННЫЕ ИЗ SUPABASE ЗДЕСЬ
+    const SUPABASE_URL = 'https://hjgeubtprprvnmszjbaj.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqZ2V1YnRwcnBydm5tc3pqYmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTEyMTUsImV4cCI6MjA5NDMyNzIxNX0.j5WdnROT426wTMzjI6kMWhrU_pnPqteIboGK6km2pn0';
+    
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function signUp() {
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const login = document.getElementById('reg-login').value;
+        const status = document.getElementById('status');
+
+        status.innerText = "Связь с сервером...";
+
+        // 1. Регистрируем пользователя в системе аутентификации
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+        });
+
+        if (error) {
+            status.innerText = "Ошибка: " + error.message;
+            return;
+        }
+
+        // 2. Если всё ок, записываем его позывной в нашу таблицу profiles
+        if (data.user) {
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .insert([
+                    { id: data.user.id, login: login, email: email }
+                ]);
+
+            if (profileError) {
+                status.innerText = "Ошибка профиля: " + profileError.message;
+            } else {
+                status.innerText = "Регистрация успешна! Проверь почту для подтверждения.";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
