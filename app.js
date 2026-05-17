@@ -224,12 +224,12 @@ document.addEventListener('DOMContentLoaded', async () => {
  */
 async function checkUserSession() {
     try {
-        // 1. Получаем текущую сессию
+        // 1. Получаем текущую сессию из нашего клиента 'db'
         const { data: { session }, error: sessionError } = await db.auth.getSession();
         
         if (sessionError) throw sessionError;
 
-        // Если сессии нет — отправляем пользователя на стартовую локацию «Лифт»
+        // Если сессии нет — отправляем в Лифт
         if (!session) {
             console.warn("Пользователь не авторизован. Перенаправление в Лифт...");
             window.location.href = 'index.html'; 
@@ -239,21 +239,21 @@ async function checkUserSession() {
         const user = session.user;
         console.log("Успешная сессия для UID:", user.id);
 
-        // 2. Получаем никнейм (Сначала проверяем таблицу профилей, затем metadata)
+        // 2. Получаем логин из таблицы profiles
         let username = await fetchUserProfile(user.id);
         
+        // 3. Строгий фолбэк: используем метаданные ИСКЛЮЧИТЕЛЬНО если из БД пришло пустое значение
         if (!username) {
-            // Фолбэк: если в БД пусто, пробуем достать из метаданных регистрации
+            console.log("В таблице profiles пусто, переключаемся на метаданные/email");
             username = user.user_metadata?.username || user.email.split('@')[0];
         }
 
-        // 3. Обновляем интерфейс
+        // 4. Передаем имя в HUD (Сюда должно прийти 'Piranita')
+        console.log("Финальное имя, отправляемое в HUD:", username);
         updateHUD(username);
 
     } catch (error) {
         console.error("Ошибка при проверке сессии:", error.message);
-        // В случае критической ошибки тоже можно редиректить
-        // window.location.href = 'index.html';
     }
 }
 
