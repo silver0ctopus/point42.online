@@ -7,7 +7,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Использование window.supabase гарантирует, что мы вызываем метод класса из CDN,
 // а результат (клиент) записываем в нашу глобальную переменную
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
 
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function checkUserSession() {
     try {
         // 1. Получаем текущую сессию
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await db.auth.getSession();
         
         if (sessionError) throw sessionError;
 
@@ -263,7 +263,7 @@ async function checkUserSession() {
 async function fetchUserProfile(userId) {
     try {
         // Предполагаем, что таблица называется 'profiles', а колонка с ником — 'username'
-        const { data, error } = await supabase
+        const { data, error } = await db
             .from('profiles')
             .select('username')
             .eq('id', userId)
