@@ -204,6 +204,40 @@
 
     </a-scene>
 
+    <!-- Игровой HUD (Верхний слой) -->
+<div id="game-hud">
+  <!-- Блок игрока в правом верхнем углу -->
+  <div class="player-status-block" id="hud-avatar-btn" title="Открыть инвентарь (I)">
+    <div class="avatar-frame">
+      <!-- Здесь позже будет <img> с аватаркой -->
+      <div class="avatar-placeholder"></div>
+    </div>
+    <div class="player-name" id="hud-player-name">Загрузка...</div>
+    <!-- Место для будущего прогресс-бара здоровья -->
+    <div class="health-bar-container-placeholder"></div>
+  </div>
+</div>
+
+<!-- Модальное окно информации об игроке (Инвентарь) -->
+<div id="inventory-modal" class="modal-overlay hidden">
+  <div class="modal-content">
+    <button class="close-btn" id="close-inventory-btn">&times;</button>
+    
+    <h2>Информация о игроке</h2>
+    <div class="player-info-detailed">
+      <div class="avatar-frame large">
+        <div class="avatar-placeholder"></div>
+      </div>
+      <div class="player-details">
+        <h3 id="modal-player-name">Имя Игрока</h3>
+        <p>Статус: В сети</p>
+        <p>Локация: Лобби</p>
+        <!-- Здесь позже будет снаряжение -->
+      </div>
+    </div>
+  </div>
+</div>
+
     <!--Работа двери-->
     <script>
         window.addEventListener('load', () => {
