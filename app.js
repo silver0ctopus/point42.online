@@ -271,22 +271,31 @@ async function fetchUserProfile(userId) {
 // ==========================================
 
 /**
- * Внедряет данные пользователя в HTML-элементы HUD и модального окна
+ * Внедряет реальное имя пользователя из Supabase в ваш HTML-код Лобби
  */
 function updateHUD(username) {
-    // Селекторы подставьте в соответствии с вашим HTML
-    const hudNicknameEl = document.querySelector('#hud-nickname'); // Элемент в углу экрана
-    const modalNicknameEl = document.querySelector('#modal-profile-name'); // Элемент внутри 2D инвентаря
+    // 1. Находим элемент имени в верхнем HUD-блоке (был id="hud-player-name")
+    const hudPlayerNameEl = document.querySelector('#hud-player-name'); 
+    
+    // 2. Находим элемент имени внутри модального окна инвентаря (был id="modal-player-name")
+    const modalPlayerNameEl = document.querySelector('#modal-player-name'); 
 
-    if (hudNicknameEl) {
-        hudNicknameEl.textContent = username;
+    // Обновляем имя в HUD на месте текста "Загрузка..."
+    if (hudPlayerNameEl) {
+        hudPlayerNameEl.textContent = username;
     } else {
-        console.warn("Элемент HUD для никнейма не найден в DOM");
+        console.warn("Элемент #hud-player-name не найден в lobby.html");
     }
 
-    if (modalNicknameEl) {
-        modalNicknameEl.textContent = username;
+    // Обновляем имя в инвентаре на месте текста "Имя Игрока"
+    if (modalPlayerNameEl) {
+        modalPlayerNameEl.textContent = username;
+    } else {
+        console.warn("Элемент #modal-player-name не найден в lobby.html");
     }
+    
+    console.log(`Интерфейс Point42 успешно обновлен для пользователя: ${username}`);
+}
     
     // Здесь же в будущем можно будет запустить рендер кастомной аватарки, 
     // если её URL будет храниться в профиле:
