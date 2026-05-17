@@ -299,5 +299,4 @@ function updateHUD(username) {
     
     // Здесь же в будущем можно будет запустить рендер кастомной аватарки, 
     // если её URL будет храниться в профиле:
-    // if (avatarUrl) { document.querySelector('#hud-avatar').src = avatarUrl; }
-}
+    // if (avatarUrl) { document.querySelector('#hud-avatar').src = avatarUrl; } }
