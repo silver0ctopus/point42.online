@@ -27,44 +27,60 @@
 </div>
 
 <script>
-    // ВСТАВЬ СВОИ ДАННЫЕ ИЗ SUPABASE ЗДЕСЬ
+    // 1. Проверяем, не объявлен ли клиент ранее, и инициализируем его
     const SUPABASE_URL = 'https://hjgeubtprprvnmszjbaj.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqZ2V1YnRwcnBydm5tc3pqYmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTEyMTUsImV4cCI6MjA5NDMyNzIxNX0.j5WdnROT426wTMzjI6kMWhrU_pnPqteIboGK6km2pn0';
+    const SUPABASE_KEY = 'ТВОЙ_ANON_PUBLIC_KEY'; // <-- не забудь вставить свой ключ вместо этого текста
     
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Используем window.supabaseClient, чтобы точно избежать конфликтов имен с SDK
+    window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // 2. Сама функция регистрации
     async function signUp() {
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
         const login = document.getElementById('reg-login').value;
         const status = document.getElementById('status');
 
-        status.innerText = "Связь с сервером...";
-
-        // 1. Регистрируем пользователя в системе аутентификации
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-        });
-
-        if (error) {
-            status.innerText = "Ошибка: " + error.message;
+        if (!email || !password || !login) {
+            status.innerText = "Ошибка: Заполни все поля терминала!";
             return;
         }
 
-        // 2. Если всё ок, записываем его позывной в нашу таблицу profiles
-        if (data.user) {
-            const { error: profileError } = await supabase
-                .from('profiles')
-                .insert([
-                    { id: data.user.id, login: login, email: email }
-                ]);
+        status.innerText = "Инициализация протокола связи...";
 
-            if (profileError) {
-                status.innerText = "Ошибка профиля: " + profileError.message;
-            } else {
-                status.innerText = "Регистрация успешна! Проверь почту для подтверждения.";
+        try {
+            // Отправляем запрос через наш созданный клиент
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                status.innerText = "Ошибка Auth: " + error.message;
+                return;
             }
+
+            status.innerText = "Запись позывного в реестр...";
+
+            if (data.user) {
+                const { error: profileError } = await window.supabaseClient
+                    .from('profiles')
+                    .insert([
+                        { id: data.user.id, login: login, email: email }
+                    ]);
+
+                if (profileError) {
+                    status.innerText = "Ошибка БД: " + profileError.message;
+                } else {
+                    status.innerText = "Гражданин успешно зарегистрирован в Point 42!";
+                }
+            } else {
+                status.innerText = "Ошибка: ID пользователя не получен.";
+            }
+
+        } catch (err) {
+            status.innerText = "Критический сбой скрипта: " + err.message;
+            console.error(err);
         }
     }
 </script>
