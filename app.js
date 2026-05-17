@@ -262,21 +262,26 @@ async function checkUserSession() {
  */
 async function fetchUserProfile(userId) {
     try {
-        // Предполагаем, что таблица называется 'profiles', а колонка с ником — 'username'
+        console.log("Запрос в профили для UID:", userId);
+        
         const { data, error } = await db
             .from('profiles')
-            .select('login')
+            .select('login') // Проверьте, что в БД колонка именно маленькими буквами 'login'
             .eq('id', userId)
             .single();
 
         if (error) {
-            // Если таблицы нет или запись не найдена, это обработается в блоке catch
+            // Если Supabase вернул ошибку, мы её залогируем
+            console.error("Supabase вернул ошибку при запросе профиля:", error);
             throw error;
         }
 
-        return data?.username;
+        console.log("Данные из таблицы profiles успешно получены:", data);
+        return data?.login; 
+
     } catch (err) {
-        console.log("Дополнительные данные профиля не найдены в таблице profiles, используем метаданные.");
+        // Логируем ЛЮБУЮ ошибку (сетевую, RLS, синтаксическую)
+        console.error("Критическая ошибка в fetchUserProfile:", err);
         return null;
     }
 }
