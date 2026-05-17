@@ -22,6 +22,8 @@
     <input type="text" id="reg-login" placeholder="ПОЗЫВНОЙ (LOGIN)">
     <input type="email" id="reg-email" placeholder="E-MAIL">
     <input type="password" id="reg-password" placeholder="ПАРОЛЬ">
+    <input type="password" id="reg-password-confirm" placeholder="ПОДТВЕРДИТЕ ПАРОЛЬ">
+    
     <button onclick="signUp()">Зарегистрироваться</button>
     <div id="status"></div>
 </div>
@@ -36,53 +38,62 @@
 
     // 2. Сама функция регистрации
     async function signUp() {
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
-        const login = document.getElementById('reg-login').value;
-        const status = document.getElementById('status');
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const passwordConfirm = document.getElementById('reg-password-confirm').value; // Берем значение второго поля
+    const login = document.getElementById('reg-login').value;
+    const status = document.getElementById('status');
 
-        if (!email || !password || !login) {
-            status.innerText = "Ошибка: Заполни все поля терминала!";
+    // 1. Базовая проверка на заполнение
+    if (!email || !password || !login) {
+        status.innerText = "Ошибка: Заполни все поля терминала!";
+        return;
+    }
+
+    // 2. ПРОВЕРКА СОВПАДЕНИЯ ПАРОЛЕЙ
+    if (password !== passwordConfirm) {
+        status.innerText = "Ошибка: Пароли не совпадают!";
+        status.style.color = "#ff0000"; // Можно подсветить красным для важности
+        return;
+    }
+
+    // 3. Проверка длины пароля (Supabase по умолчанию требует минимум 6 символов)
+    if (password.length < 6) {
+        status.innerText = "Ошибка: Пароль слишком короткий (мин. 6 симв.)";
+        return;
+    }
+
+    status.style.color = "#00ff00";
+    status.innerText = "Инициализация протокола связи...";
+
+    try {
+        // ... далее идет твой существующий код window.supabaseClient.auth.signUp ...
+        const { data, error } = await window.supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+        });
+        
+        // ... и запись в таблицу profiles ...
+        if (error) {
+            status.innerText = "Ошибка Auth: " + error.message;
             return;
         }
 
-        status.innerText = "Инициализация протокола связи...";
+        if (data.user) {
+            const { error: profileError } = await window.supabaseClient
+                .from('profiles')
+                .insert([{ id: data.user.id, login: login, email: email }]);
 
-        try {
-            // Отправляем запрос через наш созданный клиент
-            const { data, error } = await window.supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-            });
-
-            if (error) {
-                status.innerText = "Ошибка Auth: " + error.message;
-                return;
-            }
-
-            status.innerText = "Запись позывного в реестр...";
-
-            if (data.user) {
-                const { error: profileError } = await window.supabaseClient
-                    .from('profiles')
-                    .insert([
-                        { id: data.user.id, login: login, email: email }
-                    ]);
-
-                if (profileError) {
-                    status.innerText = "Ошибка БД: " + profileError.message;
-                } else {
-                    status.innerText = "Гражданин успешно зарегистрирован в Point 42!";
-                }
+            if (profileError) {
+                status.innerText = "Ошибка БД: " + profileError.message;
             } else {
-                status.innerText = "Ошибка: ID пользователя не получен.";
+                status.innerText = "Гражданин успешно зарегистрирован в Point 42!";
             }
-
-        } catch (err) {
-            status.innerText = "Критический сбой скрипта: " + err.message;
-            console.error(err);
         }
+    } catch (err) {
+        status.innerText = "Критический сбой: " + err.message;
     }
+}
 </script>
 
 </body>
