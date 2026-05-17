@@ -210,8 +210,6 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // СЕКЦИЯ: ИНИЦИАЛИЗАЦИЯ И АВТОРИЗАЦИЯ SUPABASE
 // ==========================================
 
-// Предполагается, что supabase уже инициализирован ранее:
-// const supabase = supabase.createClient('URL', 'KEY');
 
 document.addEventListener('DOMContentLoaded', async () => {
     await checkUserSession();
