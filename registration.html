@@ -29,7 +29,7 @@
 <script>
     // 1. Проверяем, не объявлен ли клиент ранее, и инициализируем его
     const SUPABASE_URL = 'https://hjgeubtprprvnmszjbaj.supabase.co';
-    const SUPABASE_KEY = 'ТВОЙ_ANON_PUBLIC_KEY'; // <-- не забудь вставить свой ключ вместо этого текста
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqZ2V1YnRwcnBydm5tc3pqYmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3NTEyMTUsImV4cCI6MjA5NDMyNzIxNX0.j5WdnROT426wTMzjI6kMWhrU_pnPqteIboGK6km2pn0'; // <-- не забудь вставить свой ключ вместо этого текста
     
     // Используем window.supabaseClient, чтобы точно избежать конфликтов имен с SDK
     window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
