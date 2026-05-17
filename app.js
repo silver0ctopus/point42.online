@@ -265,7 +265,7 @@ async function fetchUserProfile(userId) {
         // Предполагаем, что таблица называется 'profiles', а колонка с ником — 'username'
         const { data, error } = await db
             .from('profiles')
-            .select('username')
+            .select('login')
             .eq('id', userId)
             .single();
 
