@@ -1,210 +1,148 @@
-// Предполагаем, что db инициализирован глобально, как в lobby.html, 
-// либо импортируется здесь. Если db в window:
+
+// 1. Инициализируем подключение к базе данных
 const db = window.db; 
 
+// 2. Объявляем переменные интерфейса на самом верху, чтобы они были доступны ВЕЗДЕ в этом файле
+let authUi, authTitle, inputLogin, inputEmail, inputPassword, inputConfirm;
+let btnPrimary, btnGuest, toggleLink, statusDiv;
+let isSignUpMode = false;
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Элементы UI
-    const authTitle = document.getElementById('auth-title');
-    const inputLogin = document.getElementById('auth-login');
-    const inputEmail = document.getElementById('auth-email');
-    const inputPassword = document.getElementById('auth-password');
-    const inputConfirm = document.getElementById('auth-password-confirm');
-    
-    const btnPrimary = document.getElementById('btn-primary');
-    const btnGuest = document.getElementById('btn-guest');
-    const toggleLink = document.getElementById('auth-toggle-link');
-    const statusDiv = document.getElementById('auth-status');
-
-    let isSignUpMode = false;
-
-    // 1. Переключение режимов (Вход / Регистрация)
-    toggleLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        isSignUpMode = !isSignUpMode;
-        showStatus('');
-
-        if (isSignUpMode) {
-            authTitle.innerText = 'РЕГИСТРАЦИЯ ТЕРМИНАЛА';
-            btnPrimary.innerText = 'ЗАРЕГИСТРИРОВАТЬСЯ';
-            toggleLink.innerText = 'Уже есть терминал? Войти';
-            inputLogin.classList.remove('hidden');
-            inputConfirm.classList.remove('hidden');
-        } else {
-            authTitle.innerText = 'АВТОРИЗАЦИЯ ТЕРМИНАЛА';
-            btnPrimary.innerText = 'ВОЙТИ';
-            toggleLink.innerText = 'Нет терминала? Зарегистрировать';
-            inputLogin.classList.add('hidden');
-            inputConfirm.classList.add('hidden');
-        }
-    });
-
-    // 2. Основное действие (Вход или Регистрация)
-    btnPrimary.addEventListener('click', async () => {
-        const email = inputEmail.value.trim();
-        const password = inputPassword.value;
-        const login = inputLogin.value.trim();
-        const confirmPass = inputConfirm.value;
-
-        showStatus('Обработка запроса...', 'info');
-
-        if (!email || !password) {
-            showStatus('Заполните Email и Пароль!', 'error');
-            return;
-        }
-
-        if (isSignUpMode) {
-            // Валидация регистрации
-            if (!login) {
-                showStatus('Укажите позывной!', 'error');
-                return;
-            }
-            if (password !== confirmPass) {
-                showStatus('Пароли не совпадают!', 'error');
-                return;
-            }
-
-            // РЕГИСТРАЦИЯ в Supabase Auth
-            const { data, error } = await db.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    // Передаем login в метаданные, чтобы триггер в БД 
-                    // (или мы вручную) записал его в таблицу profiles
-                    data: { username: login } 
-                }
-            });
-
-            if (error) {
-                showStatus(`Ошибка регистрации: ${error.message}`, 'error');
-            } else {
-                showStatus('Регистрация успешна! Проверьте почту (если включено подтверждение) или войдите.', 'success');
-                // Если в Supabase выключено подтверждение по email, юзер сразу авторизован.
-                // Можно делать редирект: window.location.href = './lobby.html';
-            }
-
-        } else {
-            // ВХОД в Supabase Auth
-            const { data, error } = await db.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-
-            if (error) {
-                showStatus(`Ошибка входа: ${error.message}`, 'error');
-            } else {
-                showStatus('Доступ разрешен. Запуск Лифта...', 'success');
-                setTimeout(() => {
-                    window.location.href = './lobby.html';
-                }, 1000);
-            }
-        }
-    });
-
-    // 3. Гостевой пропуск
-    btnGuest.addEventListener('click', async () => {
-        showStatus('Авторизация гостя...', 'info');
-        
-        // Вариант А: Использовать Anonymous Auth от Supabase (если включен в консоли)
-        const { data, error } = await db.auth.signInAnonymously();
-        
-        if (error) {
-            // Вариант Б: Фолбэк, если анонимный вход выключен — просто пускаем в лобби
-            // Но тогда в lobby.html db.auth.getSession() вернет null, 
-            // и сработает редирект обратно. Поэтому лучше включить Anonymous Auth в Supabase!
-            showStatus(`Гостевой вход недоступен: ${error.message}`, 'error');
-        } else {
-            window.location.href = './lobby.html';
-        }
-    });
-
-    // Вспомогательная функция вывода статуса
-    function showStatus(text, type = '') {
-        statusDiv.innerText = text;
-        statusDiv.className = `status-msg ${type}`;
+    // Проверяем бэкенд
+    if (!db) {
+        console.error("КРИТИЧЕСКАЯ ОШИБКА POINT 42: Клиент Supabase (db) не найден! Проверьте index.html");
+        return;
     }
-});
 
+    // 3. Привязываем переменные к элементам DOM, когда страница загрузилась
+    authUi = document.getElementById('auth-ui');
+    authTitle = document.getElementById('auth-title');
+    inputLogin = document.getElementById('auth-login');
+    inputEmail = document.getElementById('auth-email');
+    inputPassword = document.getElementById('auth-password');
+    inputConfirm = document.getElementById('auth-password-confirm');
+    
+    btnPrimary = document.getElementById('btn-primary');
+    btnGuest = document.getElementById('btn-guest');
+    toggleLink = document.getElementById('auth-toggle-link');
+    statusDiv = document.getElementById('auth-status');
 
-// Кнопка вызова панели (перенесли сюда из HTML)
+    // Кнопка вызова панели (для открытия терминала в Лифте)
     const callBtn = document.getElementById('call-button');
     if (callBtn) {
         callBtn.addEventListener('click', () => {
-            authUi.style.display = 'block'; 
+            if (authUi) authUi.style.display = 'block'; 
         });
     }
 
-    // Основное действие (Вход или Регистрация)
-    btnPrimary.addEventListener('click', async () => {
-        const email = inputEmail.value.trim();
-        const password = inputPassword.value;
-        const login = inputLogin.value.trim();
-        const confirmPass = inputConfirm.value;
+    // 4. Переключение режимов (Вход / Регистрация)
+    if (toggleLink) {
+        toggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isSignUpMode = !isSignUpMode;
+            showStatus('');
 
-        showStatus('Обработка запроса...', 'info');
-
-        if (!email || !password) {
-            showStatus('Заполните Email и Пароль!', 'error');
-            return;
-        }
-
-        if (isSignUpMode) {
-            if (!login) { showStatus('Укажите позывной!', 'error'); return; }
-            if (password !== confirmPass) { showStatus('Пароли не совпадают!', 'error'); return; }
-
-            const { data, error } = await db.auth.signUp({
-                email: email,
-                password: password,
-                options: { data: { username: login } }
-            });
-
-            if (error) {
-                showStatus(`Ошибка регистрации: ${error.message}`, 'error');
+            if (isSignUpMode) {
+                authTitle.innerText = 'РЕГИСТРАЦИЯ ТЕРМИНАЛА';
+                btnPrimary.innerText = 'ЗАРЕГИСТРИРОВАТЬСЯ';
+                toggleLink.innerText = 'Уже есть терминал? Войти';
+                inputLogin.classList.remove('hidden');
+                inputConfirm.classList.remove('hidden');
             } else {
-                showStatus('Регистрация успешна! Запуск терминала...', 'success');
-                
-                // Сохраняем для Лобби локально, как в твоем старом скрипте
-                localStorage.setItem('psi_user_type', 'user');
-                localStorage.setItem('psi_user_name', login);
+                authTitle.innerText = 'АВТОРИЗАЦИЯ ТЕРМИНАЛА';
+                btnPrimary.innerText = 'ВОЙТИ';
+                toggleLink.innerText = 'Нет терминала? Зарегистрировать';
+                inputLogin.classList.add('hidden');
+                inputConfirm.classList.add('hidden');
+            }
+        });
+    }
 
-                // Закрываем UI и открываем двери лифта!
-                authUi.style.display = 'none';
+    // 5. Логика Главной Кнопки (Вход / Регистрация)
+    if (btnPrimary) {
+        btnPrimary.addEventListener('click', async () => {
+            const email = inputEmail.value.trim();
+            const password = inputPassword.value;
+            const login = inputLogin.value.trim();
+            const confirmPass = inputConfirm.value;
+
+            showStatus('Обработка запроса...', 'info');
+
+            if (!email || !password) {
+                showStatus('Заполните Email и Пароль!', 'error');
+                return;
+            }
+
+            if (isSignUpMode) {
+                // Флоу РЕГИСТРАЦИИ
+                if (!login) { showStatus('Укажите позывной!', 'error'); return; }
+                if (password !== confirmPass) { showStatus('Пароли не совпадают!', 'error'); return; }
+
+                const { data, error } = await db.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: { data: { username: login } }
+                });
+
+                if (error) {
+                    showStatus(`Ошибка регистрации: ${error.message}`, 'error');
+                } else {
+                    showStatus('Регистрация успешна! Вход...', 'success');
+                    
+                    localStorage.setItem('psi_user_type', 'user');
+                    localStorage.setItem('psi_user_name', login);
+
+                    // Прячем терминал и открываем двери лифта через встроенную функцию
+                    if (authUi) authUi.style.display = 'none';
+                    if (window.openDoors) window.openDoors();
+                }
+
+            } else {
+                // Флоу ВХОДА
+                const { data, error } = await db.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    showStatus(`Ошибка входа: ${error.message}`, 'error');
+                } else {
+                    showStatus('Доступ разрешен. Запуск Лифта...', 'success');
+                    
+                    localStorage.setItem('psi_user_type', 'user');
+                    // Временный фолбэк для имени, пока не подтянули профиль
+                    localStorage.setItem('psi_user_name', email.split('@')[0]);
+
+                    if (authUi) authUi.style.display = 'none';
+                    if (window.openDoors) window.openDoors(); 
+                }
+            }
+        });
+    }
+
+    // 6. Логика Гостевого пропуска
+    if (btnGuest) {
+        btnGuest.addEventListener('click', async () => {
+            showStatus('Авторизация гостя...', 'info');
+            const { data, error } = await db.auth.signInAnonymously();
+            
+            if (error) {
+                showStatus(`Гостевой вход недоступен: ${error.message}`, 'error');
+            } else {
+                localStorage.setItem('psi_user_type', 'guest');
+                localStorage.setItem('psi_user_name', 'Гость');
+                
+                if (authUi) authUi.style.display = 'none';
                 if (window.openDoors) window.openDoors();
             }
+        });
+    }
 
-        } else {
-            // ВХОД
-            const { data, error } = await db.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-
-            if (error) {
-                showStatus(`Ошибка входа: ${error.message}`, 'error');
-            } else {
-                showStatus('Доступ разрешен. Запуск Лифта...', 'success');
-                
-                // Нам нужно вытащить никнейм из базы, но пока запишем email как фолбэк
-                localStorage.setItem('psi_user_type', 'user');
-                localStorage.setItem('psi_user_name', email.split('@')[0]);
-
-                authUi.style.display = 'none';
-                if (window.openDoors) window.openDoors(); // Запускаем анимацию!
-            }
+    // Вспомогательная функция для вывода ошибок на экран терминала
+    function showStatus(text, type = '') {
+        if (statusDiv) {
+            statusDiv.innerText = text;
+            statusDiv.className = `status-msg ${type}`;
         }
-    });
-
-    // Гостевой пропуск
-    btnGuest.addEventListener('click', async () => {
-        showStatus('Авторизация гостя...', 'info');
-        const { data, error } = await db.auth.signInAnonymously();
-        
-        if (error) {
-            showStatus(`Гостевой вход недоступен: ${error.message}`, 'error');
-        } else {
-            localStorage.setItem('psi_user_type', 'guest');
-            localStorage.setItem('psi_user_name', 'Гость');
-            
-            authUi.style.display = 'none';
-            if (window.openDoors) window.openDoors();
-        }
-    });
+    }
+});
