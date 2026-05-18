@@ -123,3 +123,88 @@ document.addEventListener('DOMContentLoaded', () => {
         statusDiv.className = `status-msg ${type}`;
     }
 });
+
+
+// Кнопка вызова панели (перенесли сюда из HTML)
+    const callBtn = document.getElementById('call-button');
+    if (callBtn) {
+        callBtn.addEventListener('click', () => {
+            authUi.style.display = 'block'; 
+        });
+    }
+
+    // Основное действие (Вход или Регистрация)
+    btnPrimary.addEventListener('click', async () => {
+        const email = inputEmail.value.trim();
+        const password = inputPassword.value;
+        const login = inputLogin.value.trim();
+        const confirmPass = inputConfirm.value;
+
+        showStatus('Обработка запроса...', 'info');
+
+        if (!email || !password) {
+            showStatus('Заполните Email и Пароль!', 'error');
+            return;
+        }
+
+        if (isSignUpMode) {
+            if (!login) { showStatus('Укажите позывной!', 'error'); return; }
+            if (password !== confirmPass) { showStatus('Пароли не совпадают!', 'error'); return; }
+
+            const { data, error } = await db.auth.signUp({
+                email: email,
+                password: password,
+                options: { data: { username: login } }
+            });
+
+            if (error) {
+                showStatus(`Ошибка регистрации: ${error.message}`, 'error');
+            } else {
+                showStatus('Регистрация успешна! Запуск терминала...', 'success');
+                
+                // Сохраняем для Лобби локально, как в твоем старом скрипте
+                localStorage.setItem('psi_user_type', 'user');
+                localStorage.setItem('psi_user_name', login);
+
+                // Закрываем UI и открываем двери лифта!
+                authUi.style.display = 'none';
+                if (window.openDoors) window.openDoors();
+            }
+
+        } else {
+            // ВХОД
+            const { data, error } = await db.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                showStatus(`Ошибка входа: ${error.message}`, 'error');
+            } else {
+                showStatus('Доступ разрешен. Запуск Лифта...', 'success');
+                
+                // Нам нужно вытащить никнейм из базы, но пока запишем email как фолбэк
+                localStorage.setItem('psi_user_type', 'user');
+                localStorage.setItem('psi_user_name', email.split('@')[0]);
+
+                authUi.style.display = 'none';
+                if (window.openDoors) window.openDoors(); // Запускаем анимацию!
+            }
+        }
+    });
+
+    // Гостевой пропуск
+    btnGuest.addEventListener('click', async () => {
+        showStatus('Авторизация гостя...', 'info');
+        const { data, error } = await db.auth.signInAnonymously();
+        
+        if (error) {
+            showStatus(`Гостевой вход недоступен: ${error.message}`, 'error');
+        } else {
+            localStorage.setItem('psi_user_type', 'guest');
+            localStorage.setItem('psi_user_name', 'Гость');
+            
+            authUi.style.display = 'none';
+            if (window.openDoors) window.openDoors();
+        }
+    });
