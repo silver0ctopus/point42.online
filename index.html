@@ -43,6 +43,14 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <!-- 1. Загружаем сам Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- 2. Сразу же создаем глобального клиента db -->
+<script>
+  // Используй тут свои реальные URL и Ключ проекта Point 42!
+  window.db = window.supabase.createClient('https://your-project.supabase.co', 'your-anon-key');
+</script>
 
     <!--================================================-->
     <!-- Интерфейс авторизации -->
