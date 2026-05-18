@@ -43,20 +43,23 @@
 </head>
 <body>
 
+    <!--================================================-->
     <!-- Интерфейс авторизации -->
     <div id="auth-ui" class="terminal-card">
     <h3 id="auth-title">АВТОРИЗАЦИЯ ТЕРМИНАЛА</h3>
     
-    <!-- Поля ввода -->
     <div class="input-group">
-        <!-- Поле логина/позывного нужно ТОЛЬКО при регистрации для таблицы profiles -->
+        <!-- Эти два поля скрыты при входе (у них есть класс hidden) -->
         <input type="text" id="auth-login" placeholder="ПОЗЫВНОЙ (LOGIN)..." class="hidden">
+        
+        <!-- Эти два поля видны ВСЕГДА -->
         <input type="email" id="auth-email" placeholder="E-MAIL...">
         <input type="password" id="auth-password" placeholder="ПАРОЛЬ...">
+        
+        <!-- Это поле тоже скрыто при входе -->
         <input type="password" id="auth-password-confirm" placeholder="ПОДТВЕРДИТЕ ПАРОЛЬ..." class="hidden">
     </div>
 
-    <!-- Кнопки действий -->
     <div class="actions-group">
         <button id="btn-primary">ВОЙТИ</button>
         <button id="btn-guest">ГОСТЕВОЙ ПРОПУСК</button>
@@ -64,15 +67,13 @@
 
     <hr style="border: 0.5px solid #0ff; margin: 15px 0;">
 
-    <!-- Переключатель режима -->
     <div class="toggle-mode">
         <a href="#" id="auth-toggle-link">Нет терминала? Зарегистрировать</a>
     </div>
     
-    <!-- Статус-лог для вывода ошибок в стиле интерфейса -->
     <div id="auth-status" class="status-msg"></div>
 </div>
-
+<!--================================================-->
     <a-scene background="color: #000">
         
         <!-- Ресурсы (звуки, текстуры) -->
