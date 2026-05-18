@@ -1,6 +1,6 @@
 // Предполагаем, что db инициализирован глобально, как в lobby.html, 
 // либо импортируется здесь. Если db в window:
-const db = window.supabase; 
+const db = window.db; 
 
 document.addEventListener('DOMContentLoaded', () => {
     // Элементы UI
