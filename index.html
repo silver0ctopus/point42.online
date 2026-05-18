@@ -133,49 +133,26 @@
 
     </a-scene>
 
-    <script>
-        const authUi = document.getElementById('auth-ui');
-        const callBtn = document.getElementById('call-button');
-        
-        // Открытие окна авторизации
-        callBtn.addEventListener('click', () => {
-            authUi.style.display = 'block';
-        });
+<script>
+    // Оставляем только то, что управляет 3D-сценой (A-Frame)
+    window.openDoors = function() {
+        const leftDoor = document.getElementById('left-door');
+        const rightDoor = document.getElementById('right-door');
 
-        // Функция входа
-        function login(type) {
-            const name = document.getElementById('username').value || "Гость";
-            
-            // Сохраняем данные для Лобби
-            localStorage.setItem('psi_user_type', type);
-            localStorage.setItem('psi_user_name', name);
-            
-            authUi.style.display = 'none';
-            openDoors();
-        }
+        leftDoor.setAttribute('animation', 'property: position; to: -2.2 1.5 -1.98; dur: 2000; easing: easeInQuad');
+        rightDoor.setAttribute('animation', 'property: position; to: 2.2 1.5 -1.98; dur: 2000; easing: easeInQuad');
 
-        // Анимация открытия дверей и переход
-        function openDoors() {
-            const leftDoor = document.getElementById('left-door');
-            const rightDoor = document.getElementById('right-door');
+        setTimeout(() => {
+            window.location.href = 'lobby.html' + "?from=" + window.location.pathname.split('/').pop(); 
+        }, 2500);
+    }
 
-            // Анимация разъезда дверей
-            leftDoor.setAttribute('animation', 'property: position; to: -2.2 1.5 -1.98; dur: 2000; easing: easeInQuad');
-            rightDoor.setAttribute('animation', 'property: position; to: 2.2 1.5 -1.98; dur: 2000; easing: easeInQuad');
+    window.onload = () => {
+        console.log("Лифт прибывает...");
+    };
+</script>
 
-            // Через 2.5 секунды переходим в Лобби
-            setTimeout(() => {
-                // Здесь будет путь к твоему файлу лобби
-                window.location.href = 'lobby.html' + "?from=" + window.location.pathname.split('/').pop(); 
-            }, 2500);
-        }
-
-        // Эффект покачивания лифта при загрузке
-        window.onload = () => {
-            console.log("Лифт прибывает...");
-            // Можно добавить тряску камеры через анимацию rig
-        };
-    </script>
+    
     <script src="./js/auth.js" type="module"></script>
 </body>
 </html>
