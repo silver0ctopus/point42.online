@@ -173,3 +173,250 @@ body, html {
 .hidden {
     display: none !important;
 }
+
+/* ==========================================================================
+   ИНТЕРФЕЙС КПК
+   ========================================================================== */
+
+/* Затемнение фона вокруг КПК */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.hidden {
+    display: none !important;
+}
+
+/* Главный корпус КПК */
+.pda-container {
+    width: 750px;
+    height: 550px;
+    background: #15181f;
+    border: 2px solid #3a4252;
+    border-radius: 8px;
+    display: flex;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+    color: #e2e8f0;
+    font-family: monospace;
+    overflow: hidden;
+}
+
+/* Сайдбар слева */
+.pda-sidebar {
+    width: 150px;
+    background: #0f1115;
+    border-right: 2px solid #3a4252;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 10px;
+    gap: 12px;
+}
+
+.pda-tab-btn, .pda-close-btn {
+    background: #1c212c;
+    border: 1px solid #4a5568;
+    color: #a0aec0;
+    padding: 12px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.pda-tab-btn:hover, .pda-close-btn:hover {
+    background: #2d3748;
+    color: #fff;
+    border-color: #718096;
+}
+
+.pda-tab-btn.active {
+    background: #3182ce;
+    color: white;
+    border-color: #63b3ed;
+    box-shadow: 0 0 10px rgba(49, 130, 206, 0.5);
+}
+
+.pda-close-btn {
+    margin-top: auto; /* Смещает кнопку "Выход" в самый низ */
+    border-color: #9b2c2c;
+    color: #feb2b2;
+}
+.pda-close-btn:hover {
+    background: #9b2c2c;
+    color: white;
+}
+
+/* Правая рабочая часть */
+.pda-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+/* Сквозная шапка с аватаркой и экипировкой */
+.pda-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    grid-template-rows: auto auto auto;
+    grid-template-areas: 
+        "head   avatar  torso"
+        "arms   avatar  legs"
+        "hobar  hobar   hobar";
+    gap: 12px;
+    background: #1a202c;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #2d3748;
+}
+
+/* Позиционирование элементов по сетке */
+.eq-slot[data-slot="head"]  { grid-area: head; }
+.eq-slot[data-slot="torso"] { grid-area: torso; }
+.eq-slot[data-slot="arms"]  { grid-area: arms; }
+.eq-slot[data-slot="legs"]  { grid-area: legs; }
+.pda-avatar-container       { grid-area: avatar; display: flex; justify-content: center; align-items: center; }
+.pda-healthbar-wrapper      { grid-area: hobar; }
+
+/* Слоты экипировки */
+.eq-slot {
+    background: #11141a;
+    border: 1px dashed #4a5568;
+    border-radius: 4px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #718096;
+    text-transform: uppercase;
+}
+
+/* Контейнер аватара */
+.pda-avatar-stub {
+    width: 80px;
+    height: 80px;
+    background: #2d3748;
+    border: 2px solid #4a5568;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Здоровье (Healthbar) */
+.pda-healthbar-wrapper {
+    background: #11141a;
+    border: 1px solid #4a5568;
+    height: 20px;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+.pda-healthbar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #9b2c2c, #e53e3e);
+    box-shadow: 0 0 8px #e53e3e;
+    transition: width 0.3s ease;
+}
+.pda-healthbar-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+/* Переключаемые страницы */
+.pda-page.hidden {
+    display: none !important;
+}
+
+.pda-page h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: #63b3ed;
+    letter-spacing: 1px;
+}
+
+/* Вкладка: Профиль */
+.pda-bio-section textarea {
+    width: 100%;
+    height: 70px;
+    background: #11141a;
+    border: 1px solid #2d3748;
+    border-radius: 4px;
+    color: #e2e8f0;
+    padding: 8px;
+    font-family: monospace;
+    resize: none;
+    box-sizing: border-box;
+}
+.pda-bio-section textarea:focus {
+    border-color: #3182ce;
+    outline: none;
+}
+
+.pda-rewards-section {
+    margin-top: 15px;
+}
+.pda-rewards-grid {
+    display: flex;
+    gap: 10px;
+}
+.reward-item {
+    width: 40px;
+    height: 40px;
+    background: #232934;
+    border: 1px solid #3a4252;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: help;
+}
+
+/* Вкладка: Рюкзак */
+.pda-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+}
+.inventory-cell {
+    aspect-ratio: 1; /* Делает ячейки идеально квадратными */
+    background: #11141a;
+    border: 1px solid #2d3748;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: background 0.1s ease;
+}
+.inventory-cell:hover {
+    background: #1c212c;
+    border-color: #4a5568;
+}
+.item-icon {
+    cursor: grab;
+}
