@@ -1,3 +1,16 @@
+// Глобальная заглушка для старых инлайновых onclick-событий в сценах A-Frame
+window.checkAccess = function(element) {
+    console.warn("Вызван устаревший метод checkAccess для элемента:", element);
+    // Если этот метод должен был открывать какую-то логику, мы перенаправим её сюда
+    if (window.interact) {
+        window.interact(element);
+    }
+};
+
+window.interact = window.interact || function(element) {
+    console.log("Временная заглушка взаимодействия с объектом:", element?.id || element);
+};
+
 // ==========================================
 // ИНИЦИАЛИЗАЦИЯ SUPABASE CLIENT
 // ==========================================
