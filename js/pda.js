@@ -116,22 +116,39 @@ function setupPDALogic() {
 
     // Управление состоянием КПК (Открыть / Закрыть)
     function togglePDA(forceState, targetTab) {
-        const isHidden = modal.classList.contains("hidden");
-        const shouldOpen = forceState !== undefined ? forceState : isHidden;
+    const modal = document.getElementById("inventory-modal");
+    const isHidden = modal.classList.contains("hidden");
+    const shouldOpen = forceState !== undefined ? forceState : isHidden;
 
-        const camera = document.querySelector("[look-controls]");
+    const sceneEl = document.querySelector("a-scene");
 
-        if (shouldOpen) {
-            modal.classList.remove("hidden");
-            if (targetTab) switchTab(targetTab);
-            // Отключаем вращение камеры в A-Frame, чтобы мышь освободилась
-            if (camera) camera.setAttribute("look-controls", "enabled: false");
-        } else {
-            modal.classList.add("hidden");
-            // Возвращаем управление камерой
-            if (camera) camera.setAttribute("look-controls", "enabled: true");
+    if (shouldOpen) {
+        modal.classList.remove("hidden");
+        if (targetTab) switchTab(targetTab);
+        
+        // БЕЗОПАСНЫЙ ВЫХОД ИЗ РЕЖИМА ОБЗОРА:
+        // 1. Говорим браузеру освободить курсор
+        if (document.pointerLockElement) {
+            document.exitPointerLock();
+        }
+        // 2. Временно усыпляем look-controls, чтобы он не перехватывал мышь при кликах
+        if (sceneEl && sceneEl.camera) {
+            sceneEl.camera.el.setAttribute("look-controls", "enabled: false");
+        }
+    } else {
+        modal.classList.add("hidden");
+        
+        // ВОЗВРАЩАЕМ ОБЗОР СЦЕНЫ:
+        // 1. Включаем look-controls обратно
+        if (sceneEl && sceneEl.camera) {
+            sceneEl.camera.el.setAttribute("look-controls", "enabled: true");
+        }
+        // 2. Возвращаем фокус на холст игры
+        if (sceneEl) {
+            sceneEl.focus();
         }
     }
+}
 
     // Клик на кнопку закрытия
     closeBtn.addEventListener("click", () => togglePDA(false));
