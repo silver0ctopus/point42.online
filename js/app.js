@@ -169,25 +169,25 @@ document.addEventListener('DOMContentLoaded', () => {
     avatarBtn.addEventListener('click', toggleInventory);
   
     // Клик по крестику в модельном окне
-    closeBtn.addEventListener('click', toggleInventory);
+    //closeBtn.addEventListener('click', toggleInventory);
   
     // Закрытие по клику на серую зону вокруг модалки
-    inventoryModal.addEventListener('click', (e) => {
-      if (e.target === inventoryModal) {
-        toggleInventory();
-      }
-    });
+    //inventoryModal.addEventListener('click', (e) => {
+    //  if (e.target === inventoryModal) {
+    //    toggleInventory();
+    //  }
+    //});
   
     // Отслеживание клавиши "I" (английская) или "Ш" (русская раскладка)
-    document.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'ш') {
-        toggleInventory();
-      }
+    //document.addEventListener('keydown', (e) => {
+    //  if (e.key.toLowerCase() === 'i' || e.key.toLowerCase() === 'ш') {
+    //    toggleInventory();
+    //  }
       // Добавим закрытие на ESC для удобства
-      if (e.key === 'Escape' && !inventoryModal.classList.contains('hidden')) {
-        toggleInventory();
-      }
-    });
+    //  if (e.key === 'Escape' && !inventoryModal.classList.contains('hidden')) {
+    //    toggleInventory();
+    //  }
+    //});
   
     // --- Заготовка под получение данных из Supabase ---
     async function loadUserData() {
