@@ -35,6 +35,8 @@ function injectPDA() {
                         <div class="eq-slot" data-slot="head">Голова</div>
                         <div class="pda-avatar-container">
                             <div class="pda-avatar-stub">⚡</div>
+                            <!-- Добавили элемент для отображения имени, который ищет app.js -->
+                            <div id="modal-player-name" class="pda-username">Загрузка...</div>
                         </div>
                         <div class="eq-slot" data-slot="torso">Торс</div>
                         <div class="eq-slot" data-slot="arms">Руки</div>
