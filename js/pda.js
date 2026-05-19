@@ -90,6 +90,12 @@ function setupPDALogic() {
     const tabBtns = document.querySelectorAll(".pda-tab-btn");
     const pages = document.querySelectorAll(".pda-page");
     const closeBtn = document.getElementById("pda-close-btn");
+    const hudBtn = document.getElementById("hud-avatar-btn");
+    if (hudBtn) {
+        hudBtn.addEventListener("click", () => {
+            togglePDA(true, "profile"); // При клике на HUD открываем профиль
+        });
+    }
 
     // Функция переключения вкладок внутри КПК
     function switchTab(tabName) {
