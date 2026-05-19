@@ -420,3 +420,15 @@ body, html {
 .item-icon {
     cursor: grab;
 }
+.pda-avatar-container {
+    flex-direction: column; /* Чтобы имя было строго под аватаркой */
+    gap: 8px;
+}
+
+.pda-username {
+    font-size: 12px;
+    font-weight: bold;
+    color: #63b3ed;
+    text-shadow: 0 0 5px rgba(99, 179, 237, 0.5);
+    text-transform: uppercase;
+}
