@@ -23,7 +23,8 @@ function injectPDA() {
                 </aside>
                 <main class="pda-main">
                     
-
+                    <div id="modal-player-name" class="pda-username">Загрузка...</div>
+                    
                     <header class="pda-header">
     <!-- Столбец 1 (Левый): Экипировка сверху вниз -->
     <div class="eq-slot" data-slot="glove-right">Перчатка П</div>
@@ -35,7 +36,7 @@ function injectPDA() {
     <!-- Столбцы 2 и 3 (Центр): Аватарка персонажа -->
     <div class="pda-avatar-container">
         <div class="pda-avatar-stub">⚡</div>
-        <div id="modal-player-name" class="pda-username">Загрузка...</div>
+        
     </div>
 
     <!-- Столбец 4 (Правый): Экипировка сверху вниз -->
