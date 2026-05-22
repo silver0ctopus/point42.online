@@ -22,20 +22,7 @@ function injectPDA() {
                     <button id="pda-close-btn" class="pda-close-btn">ВЫХОД</button>
                 </aside>
                 <main class="pda-main">
-                    //<header class="pda-header">
-                    //    <div class="eq-slot" data-slot="head">Голова</div>
-                    //    <div class="pda-avatar-container">
-                    //        <div class="pda-avatar-stub">⚡</div>
-                    //        <div id="modal-player-name" class="pda-username">Загрузка...</div>
-                    //    </div>
-                    //    <div class="eq-slot" data-slot="torso">Торс</div>
-                    //    <div class="eq-slot" data-slot="arms">Руки</div>
-                    //    <div class="pda-healthbar-wrapper">
-                    //        <div class="pda-healthbar-fill" style="width: 85%;"></div>
-                    //        <span class="pda-healthbar-text">HP 85/100</span>
-                    //    </div>
-                    //    <div class="eq-slot" data-slot="legs">Ноги</div>
-                    //</header>
+                    
 
                     <header class="pda-header">
     <!-- Столбец 1 (Левый): Экипировка сверху вниз -->
