@@ -22,20 +22,60 @@ function injectPDA() {
                     <button id="pda-close-btn" class="pda-close-btn">ВЫХОД</button>
                 </aside>
                 <main class="pda-main">
+                    //<header class="pda-header">
+                    //    <div class="eq-slot" data-slot="head">Голова</div>
+                    //    <div class="pda-avatar-container">
+                    //        <div class="pda-avatar-stub">⚡</div>
+                    //        <div id="modal-player-name" class="pda-username">Загрузка...</div>
+                    //    </div>
+                    //    <div class="eq-slot" data-slot="torso">Торс</div>
+                    //    <div class="eq-slot" data-slot="arms">Руки</div>
+                    //    <div class="pda-healthbar-wrapper">
+                    //        <div class="pda-healthbar-fill" style="width: 85%;"></div>
+                    //        <span class="pda-healthbar-text">HP 85/100</span>
+                    //    </div>
+                    //    <div class="eq-slot" data-slot="legs">Ноги</div>
+                    //</header>
+
                     <header class="pda-header">
-                        <div class="eq-slot" data-slot="head">Голова</div>
-                        <div class="pda-avatar-container">
-                            <div class="pda-avatar-stub">⚡</div>
-                            <div id="modal-player-name" class="pda-username">Загрузка...</div>
-                        </div>
-                        <div class="eq-slot" data-slot="torso">Торс</div>
-                        <div class="eq-slot" data-slot="arms">Руки</div>
-                        <div class="pda-healthbar-wrapper">
-                            <div class="pda-healthbar-fill" style="width: 85%;"></div>
-                            <span class="pda-healthbar-text">HP 85/100</span>
-                        </div>
-                        <div class="eq-slot" data-slot="legs">Ноги</div>
-                    </header>
+    <!-- Столбец 1 (Левый): Экипировка сверху вниз -->
+    <div class="eq-slot" data-slot="glove-right">Перчатка П</div>
+    <div class="eq-slot" data-slot="weapon-right">Оружие П</div>
+    <div class="eq-slot" data-slot="helmet">Шлем</div>
+    <div class="eq-slot" data-slot="armor">Куртка</div>
+    <div class="eq-slot" data-slot="backpack-mod">Разгрузка</div>
+
+    <!-- Столбцы 2 и 3 (Центр): Аватарка персонажа -->
+    <div class="pda-avatar-container">
+        <div class="pda-avatar-stub">⚡</div>
+        <div id="modal-player-name" class="pda-username">Загрузка...</div>
+    </div>
+
+    <!-- Столбец 4 (Правый): Экипировка сверху вниз -->
+    <div class="eq-slot" data-slot="glove-left">Перчатка Л</div>
+    <div class="eq-slot" data-slot="weapon-left">Оружие Л</div>
+    <div class="eq-slot" data-slot="pants">Штаны</div>
+    <div class="eq-slot" data-slot="boots">Обувь</div>
+    <div class="eq-slot" data-slot="belt">
+        Ремень
+        <div class="belt-toggle-btn" id="beltToggleBtn" style="display: none;">▶</div>
+    </div>
+
+    <!-- Строка 6 (Низ): Шкала здоровья под всей таблицей экипировки -->
+    <div class="pda-healthbar-wrapper">
+        <div class="pda-healthbar-fill" style="width: 85%;"></div>
+        <span class="pda-healthbar-text">HP 85/100</span>
+    </div>
+</header>
+
+<!-- Выдвижная панель инвентаря ремня, которая будет появляться строго под шапкой -->
+<div class="pda-belt-panel hidden" id="pdaBeltPanel">
+    <h4 style="margin: 0 0 8px 0; font-size: 11px; color: #63b3ed; letter-spacing: 1px;">ИНВЕНТАРЬ РЕМНЯ</h4>
+    <div class="pda-belt-grid" id="pdaBeltGrid">
+        <!-- Ячейки ремня будут генерироваться через JS -->
+    </div>
+</div>
+                    
                     <section class="pda-content">
                         <div id="pda-tab-profile" class="pda-page">
                             <div class="pda-bio-section">
