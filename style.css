@@ -273,9 +273,7 @@ body, html {
 /* изменения 05.23 */
 .pda-header {
     display: grid;
-    /* 4 столбца: боковые по 80px, центральные делят остаток поровну */
     grid-template-columns: 80px 1fr 1fr 80px;
-    /* 6 строк: 5 строк под слоты по 52px + 1 строка под хелсбар */
     grid-template-rows: repeat(5, 52px) auto;
     gap: 8px;
     background: #1a202c;
@@ -298,7 +296,7 @@ body, html {
 .eq-slot[data-slot="boots"]        { grid-column: 4; grid-row: 4; }
 .eq-slot[data-slot="belt"]         { grid-column: 4; grid-row: 5; position: relative; }
 
-/* Аватар занимает столбцы 2 и 3, и строки с 1 по 5 */
+/* Контейнер аватара */
 .pda-avatar-container {
     grid-column: 2 / span 2;
     grid-row: 1 / span 5;
@@ -306,19 +304,78 @@ body, html {
     border: 1px solid #3a4252;
     border-radius: 4px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column; 
+    gap: 8px; 
     justify-content: center;
     align-items: center;
 }
 
-/* Полоса здоровья встает на 6-ю строку и растягивается на все 4 столбца */
+/* Имя игрока */
+.pda-username {
+    font-size: 12px;
+    font-weight: bold;
+    color: #63b3ed;
+    text-shadow: 0 0 5px rgba(99, 179, 237, 0.5);
+    text-transform: uppercase;
+}
+
+/* Заглушка аватара */
+.pda-avatar-stub {
+    width: 80px;
+    height: 80px;
+    background: #2d3748;
+    border: 2px solid #4a5568;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Полоса здоровья */
 .pda-healthbar-wrapper {
     grid-column: 1 / 5;
     grid-row: 6;
     margin-top: 6px;
+    background: #11141a;
+    border: 1px solid #4a5568;
+    height: 20px;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+.pda-healthbar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #9b2c2c, #e53e3e);
+    box-shadow: 0 0 8px #e53e3e;
+    transition: width 0.3s ease;
+}
+.pda-healthbar-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px black;
 }
 
-/* Кнопка интерфейса тактического ремня (справа от слота ремня) */
+/* Базовые слоты экипировки с возвращенными рамками */
+.eq-slot {
+    background: #11141a;
+    border: 1px dashed #4a5568;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #718096;
+    text-transform: uppercase;
+}
+
+/* Панель ремня и кнопка */
 .belt-toggle-btn {
     position: absolute;
     right: -22px;
@@ -338,12 +395,6 @@ body, html {
     transition: background 0.2s;
     z-index: 10;
 }
-.belt-toggle-btn:hover {
-    background: #4a5568;
-    color: #fff;
-}
-
-/* Контейнер панели ремня */
 .pda-belt-panel {
     background: #1a202c;
     border: 1px solid #4a5568;
@@ -361,7 +412,7 @@ body, html {
     flex-wrap: wrap;
 }
 
-/* Переопределяем авто-высоту для сетки основного рюкзака, чтобы она бесконечно росла вниз строками по 6 ячеек */
+/* Основной рюкзак */
 .pda-inventory-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
