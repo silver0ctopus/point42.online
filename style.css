@@ -271,32 +271,64 @@ body, html {
 /* Сквозная шапка с аватаркой и экипировкой */
 
 /* изменения 05.23 */
+/* Стиль для имени игрока НАД таблицей */
+.pda-top-username {
+    font-size: 14px;
+    font-weight: bold;
+    color: #63b3ed;
+    text-shadow: 0 0 8px rgba(99, 179, 237, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px; /* Отступ до таблицы экипировки */
+    padding-left: 5px;
+}
+
 .pda-header {
     display: grid;
-    grid-template-columns: 80px 1fr 1fr 80px;
-    grid-template-rows: repeat(5, 52px) auto;
+    /* 4 колонки одинаковой ширины по 75px. Итого ширина таблицы ~320px, она аккуратно встанет слева, оставляя место */
+    grid-template-columns: repeat(4, 75px);
+    /* 6 строк: 5 строк под слоты экипировки (строгие квадраты 75px) + 1 строка под хелсбар */
+    grid-template-rows: repeat(5, 75px) auto;
     gap: 8px;
     background: #1a202c;
     padding: 15px;
     border-radius: 6px;
     border: 1px solid #2d3748;
+    width: fit-content; /* Чтобы сетка не растягивалась шире, чем наши 4 колонки */
+}
+
+/* Базовые слоты экипировки — теперь они гарантированно очерчены и будут идеальными квадратами 1х1 */
+.eq-slot {
+    background: #11141a;
+    border: 1px dashed #4a5568;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #718096;
+    text-transform: uppercase;
+    text-align: center;
+    box-sizing: border-box;
+    padding: 4px;
 }
 
 /* Расстановка слотов левого столбца */
 .eq-slot[data-slot="glove-right"]  { grid-column: 1; grid-row: 1; }
 .eq-slot[data-slot="weapon-right"] { grid-column: 1; grid-row: 2; }
 .eq-slot[data-slot="helmet"]       { grid-column: 1; grid-row: 3; }
+.eq-column[data-slot="armor"]        { grid-column: 1; grid-row: 4; } /* Фикс селектора на .eq-slot ниже */
 .eq-slot[data-slot="armor"]        { grid-column: 1; grid-row: 4; }
 .eq-slot[data-slot="backpack-mod"] { grid-column: 1; grid-row: 5; }
 
-/* Расстановка слотов правого столбца */
+/* Расстановка slots правого столбца */
 .eq-slot[data-slot="glove-left"]   { grid-column: 4; grid-row: 1; }
 .eq-slot[data-slot="weapon-left"]  { grid-column: 4; grid-row: 2; }
 .eq-slot[data-slot="pants"]        { grid-column: 4; grid-row: 3; }
 .eq-slot[data-slot="boots"]        { grid-column: 4; grid-row: 4; }
 .eq-slot[data-slot="belt"]         { grid-column: 4; grid-row: 5; position: relative; }
 
-/* Контейнер аватара */
+/* Аватар занимает столбцы 2 и 3 (в ширину как 2 слота) и строки с 1 по 5 (в высоту как 5 слотов) */
 .pda-avatar-container {
     grid-column: 2 / span 2;
     grid-row: 1 / span 5;
@@ -304,40 +336,21 @@ body, html {
     border: 1px solid #3a4252;
     border-radius: 4px;
     display: flex;
-    flex-direction: column; 
-    gap: 8px; 
     justify-content: center;
     align-items: center;
-}
-
-/* Имя игрока */
-.pda-username {
-    font-size: 12px;
-    font-weight: bold;
-    color: #63b3ed;
-    text-shadow: 0 0 5px rgba(99, 179, 237, 0.5);
-    text-transform: uppercase;
 }
 
 /* Заглушка аватара */
 .pda-avatar-stub {
-    width: 80px;
-    height: 80px;
-    background: #2d3748;
-    border: 2px solid #4a5568;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    font-size: 42px;
+    filter: drop-shadow(0 0 10px rgba(99, 179, 237, 0.3));
 }
 
-/* Полоса здоровья */
+/* Полоса здоровья растягивается ровно под всей нашей конструкцией (на все 4 столбца) */
 .pda-healthbar-wrapper {
     grid-column: 1 / 5;
     grid-row: 6;
-    margin-top: 6px;
+    margin-top: 10px;
     background: #11141a;
     border: 1px solid #4a5568;
     height: 20px;
@@ -362,20 +375,7 @@ body, html {
     text-shadow: 1px 1px 2px black;
 }
 
-/* Базовые слоты экипировки с возвращенными рамками */
-.eq-slot {
-    background: #11141a;
-    border: 1px dashed #4a5568;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: #718096;
-    text-transform: uppercase;
-}
-
-/* Панель ремня и кнопка */
+/* Кнопка ремня и панель боевого инвентаря */
 .belt-toggle-btn {
     position: absolute;
     right: -22px;
@@ -400,8 +400,9 @@ body, html {
     border: 1px solid #4a5568;
     border-radius: 6px;
     padding: 12px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    margin-top: 6px;
+    width: calc(4 * 75px + 3 * 8px); /* Идеально подгоняем ширину панели под ширину шапки */
+    box-sizing: border-box;
 }
 .pda-belt-panel.hidden {
     display: none !important;
@@ -412,7 +413,7 @@ body, html {
     flex-wrap: wrap;
 }
 
-/* Основной рюкзак */
+/* Сетка основного рюкзака */
 .pda-inventory-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
