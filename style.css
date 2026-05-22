@@ -268,56 +268,184 @@ body, html {
 }
 
 /* Сквозная шапка с аватаркой и экипировкой */
+
+
+/* новый код инвентаря */
 .pda-header {
     display: grid;
-    grid-template-columns: 80px 1fr 80px;
-    grid-template-rows: auto auto auto;
-    grid-template-areas: 
-        "head   avatar  torso"
-        "arms   avatar  legs"
-        "hobar  hobar   hobar";
-    gap: 12px;
+    /* 4 столбца: Слот-Левый, Аватар, Аватар, Слот-Правый */
+    grid-template-columns: 80px 1fr 1fr 80px;
+    /* 5 строго фиксированных строк под слоты экипировки */
+    grid-template-rows: repeat(5, 52px);
+    gap: 8px;
     background: #1a202c;
     padding: 15px;
     border-radius: 6px;
     border: 1px solid #2d3748;
 }
 
-/* Позиционирование элементов по сетке */
-.eq-slot[data-slot="head"]  { grid-area: head; }
-.eq-slot[data-slot="torso"] { grid-area: torso; }
-.eq-slot[data-slot="arms"]  { grid-area: arms; }
-.eq-slot[data-slot="legs"]  { grid-area: legs; }
-.pda-avatar-container       { grid-area: avatar; display: flex; justify-content: center; align-items: center; }
-.pda-healthbar-wrapper      { grid-area: hobar; }
+/* Позиционирование слотов экипировки */
+/* Левый столбец (Столбец 1) */
+.eq-slot[data-slot="glove-right"]  { grid-column: 1; grid-row: 1; }
+.eq-slot[data-slot="weapon-right"] { grid-column: 1; grid-row: 2; }
+.eq-slot[data-slot="helmet"]       { grid-column: 1; grid-row: 3; }
+.eq-slot[data-slot="armor"]        { grid-column: 1; grid-row: 4; }
+.eq-slot[data-slot="backpack-mod"] { grid-column: 1; grid-row: 5; }
 
-/* Слоты экипировки */
+/* Правый столбец (Столбец 4) */
+.eq-slot[data-slot="glove-left"]   { grid-column: 4; grid-row: 1; }
+.eq-slot[data-slot="weapon-left"]  { grid-column: 4; grid-row: 2; }
+.eq-slot[data-slot="pants"]        { grid-column: 4; grid-row: 3; }
+.eq-slot[data-slot="boots"]        { grid-column: 4; grid-row: 4; }
+.eq-slot[data-slot="belt"]         { grid-column: 4; grid-row: 5; position: relative; }
+
+/* Объединенный центр под 3D-сцену Аватарки (Столбцы 2 и 3, Строки с 1 по 5) */
+.pda-avatar-container {
+    grid-column: 2 / span 2;
+    grid-row: 1 / span 5;
+    background: #0f1115;
+    border: 2px solid #3a4252;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    /* Задел на будущее: здесь будет рендериться 3D Canvas */
+}
+
+/* Заглушка будущей 3D сцены персонажа */
+.pda-avatar-stub {
+    font-size: 48px;
+    filter: drop-shadow(0 0 10px rgba(0,250,150,0.2));
+    margin-bottom: 5px;
+}
+
+/* Базовый дизайн слотов экипировки */
 .eq-slot {
     background: #11141a;
     border: 1px dashed #4a5568;
     border-radius: 4px;
-    height: 55px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 11px;
-    color: #718096;
+    font-size: 9px;
+    color: #4a5568;
     text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
 }
 
-/* Контейнер аватара */
-.pda-avatar-stub {
-    width: 80px;
-    height: 80px;
+.eq-slot:hover:not(.disabled) {
+    border-color: #63b3ed;
+    background: #1c212c;
+    color: #a0aec0;
+}
+
+/* Модификатор: Слот заблокирован (для двуручного оружия в левой руке) */
+.eq-slot.disabled {
+    background: #0a0c10;
+    border: 1px solid #2d3748;
+    opacity: 0.3;
+    cursor: not-allowed;
+    color: #2d3748;
+}
+
+/* Иконка-метка внутри пустого слота (опционально для красоты) */
+.eq-slot::before {
+    font-size: 14px;
+    margin-bottom: 2px;
+    opacity: 0.4;
+}
+.eq-slot[data-slot="glove-right"]::before, .eq-slot[data-slot="glove-left"]::before { content: "🧤"; }
+.eq-slot[data-slot="weapon-right"]::before, .eq-slot[data-slot="weapon-left"]::before { content: "🔫"; }
+.eq-slot[data-slot="helmet"]::before { content: "🪖"; }
+.eq-slot[data-slot="armor"]::before { content: "🦺"; }
+.eq-slot[data-slot="backpack-mod"]::before { content: "🎒"; }
+.eq-slot[data-slot="pants"]::before { content: "👖"; }
+.eq-slot[data-slot="boots"]::before { content: "🥾"; }
+.eq-slot[data-slot="belt"]::before { content: "📟"; }
+
+
+/* Кнопка интерфейса тактического ремня (справа от слота ремня) */
+.belt-toggle-btn {
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    transform: translateY(-50%);
     background: #2d3748;
-    border: 2px solid #4a5568;
-    border-radius: 50%;
+    border: 1px solid #4a5568;
+    color: #63b3ed;
+    border-radius: 0 4px 4px 0;
+    width: 20px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    cursor: pointer;
+    font-size: 10px;
+    transition: background 0.2s;
+    z-index: 10;
 }
+.belt-toggle-btn:hover {
+    background: #4a5568;
+    color: #fff;
+}
+
+
+/* ==========================================================================
+   ИНТЕРФЕЙС ТАКТИЧЕСКОГО РЕМНЯ И ДИНАМИЧЕСКОГО РЮКЗАКА
+   ========================================================================== */
+
+/* Контейнер ремня (выдвижной) */
+.pda-belt-panel {
+    background: #1a202c;
+    border: 1px solid #4a5568;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: -10px; /* Визуальная склейка с шапкой */
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.pda-belt-panel.hidden {
+    display: none;
+}
+
+/* Сетка ячеек боевого инвентаря ремня */
+.pda-belt-grid {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Сами ячейки ремня */
+.belt-cell {
+    width: 45px;
+    height: 45px;
+    background: #0f1115;
+    border: 1px solid #3a4252;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+}
+
+/* Модификация сетки основного рюкзака — делаем автозаполнение строк по 6 ячеек */
+.pda-inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(65px, auto); /* Строки будут создаваться динамически */
+    gap: 8px;
+}
+/* конец нового кода инвентаря */
+
 
 /* Здоровье (Healthbar) */
 .pda-healthbar-wrapper {
