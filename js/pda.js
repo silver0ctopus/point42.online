@@ -21,9 +21,12 @@ function injectPDA() {
                     <button class="pda-tab-btn" data-tab="backpack">РЮКЗАК</button>
                     <button id="pda-close-btn" class="pda-close-btn">ВЫХОД</button>
                 </aside>
+               
+                <div id="modal-player-name" class="pda-username">Загрузка...</div>
+                
                 <main class="pda-main">
                     
-                    <div id="modal-player-name" class="pda-username">Загрузка...</div>
+                    
                     
                     <header class="pda-header">
     <!-- Столбец 1 (Левый): Экипировка сверху вниз -->
