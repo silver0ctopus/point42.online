@@ -280,10 +280,10 @@ body, html {
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 10px;
+    display: block;
+    width: 100%;
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content; /* Говорим блоку сжаться ровно по ширине букв никнейма, чтобы маржины сработали идеально */
+    box-sizing: border-box;
 }
 
 .pda-header {
