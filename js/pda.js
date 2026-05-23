@@ -24,7 +24,7 @@ function injectPDA() {
                
                 <main class="pda-main">
                     
-                 <div id="modal-player-name" class="pda-username">Загрузка...</div>   
+                 <div id="modal-player-name" class="pda-top-username">Загрузка...</div>   
                     
                     <header class="pda-header">
     <!-- Столбец 1 (Левый): Экипировка сверху вниз -->
