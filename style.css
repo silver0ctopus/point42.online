@@ -273,13 +273,13 @@ body, html {
 /* изменения 05.23 */
 /* Стиль для имени игрока НАД таблицей */
 .pda-top-username {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
-    color: #DC143C;
+    color: #63b3ed;
     text-shadow: 0 0 8px rgba(99, 179, 237, 0.6);
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     letter-spacing: 1px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     display: block;
     width: 100%;
     text-align: center;
