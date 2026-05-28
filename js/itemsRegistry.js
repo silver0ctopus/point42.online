@@ -153,17 +153,137 @@ const ITEMS_REGISTRY = {
     }
   },
  
-  "1070001": { },
+  "1070001": {
+    id: "1070001",
+    name: "ремень 1",
+    description: "ремень 1",
+    category: "equipment",
+    slotType: "belt",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {
+      armor: 1
+    }
+  },
  
-  "1070002": { },
+  "1070002": {
+    id: "1070002",
+    name: "ремень 2",
+    description: "ремень 2",
+    category: "equipment",
+    slotType: "belt",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 1000 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {
+      armor: 1
+    }
+  },
  
-  "1070003": { },
+  "1070003": {
+    id: "1070003",
+    name: "ремень 3",
+    description: "ремень 3",
+    category: "equipment",
+    slotType: "belt",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 5000 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {
+      armor: 1
+    }
+  },
  
-  "1070004": { },
+  "1070004": {
+    id: "1070004",
+    name: "ремень 4",
+    description: "ремень 4",
+    category: "equipment",
+    slotType: "belt",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 20000 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {
+      armor: 1
+    }
+  },
  
-  "1080001": { },
+  "1080001": {
+    id: "1080001",
+    name: "разгрузочный жилет",
+    description: "разгрузочный жилет",
+    category: "equipment",
+    slotType: "backpack-mod",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {
+      armor: 1
+    }
+  },
  
-  "1080002": { },
+  "1080002": {
+    id: "1080002",
+    name: "рюкзак",
+    description: "рюкзак",
+    category: "equipment",
+    slotType: "backpack-mod",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {
+      armor: 1
+    }
+  },
 
  "1019001": {
     id: "1019001",
