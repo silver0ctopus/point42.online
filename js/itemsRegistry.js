@@ -246,7 +246,7 @@ const ITEMS_REGISTRY = {
     name: "разгрузочный жилет",
     description: "разгрузочный жилет",
     category: "equipment",
-    slotType: "backpack-mod",          
+    slotType: "backpack",          
     isBeltCompatible: false,     
     weight: 1,
     maxStack: 1,                 
@@ -268,7 +268,7 @@ const ITEMS_REGISTRY = {
     name: "рюкзак",
     description: "рюкзак",
     category: "equipment",
-    slotType: "backpack-mod",          
+    slotType: "backpack",          
     isBeltCompatible: false,     
     weight: 1,
     maxStack: 1,                 
@@ -564,15 +564,69 @@ const ITEMS_REGISTRY = {
   // КАТЕГОРИЯ 5: РАСХОДНИКИ
   // ==========================================
 
- "5010001": { },
+ "5010001": {
+    id: "5010001",
+    name: "почти хорошая еда",
+    description: "почти хорошая еда",
+    category: "consumable",
+    slotType: null,              
+    isBeltCompatible: true,     
+    weight: 0.1,
+    maxStack: 50,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,       
+      isTwoHanded: false,
+      combustible: false,         
+    },
+    effects: {
+      healthRestore: 30
+    }
+ },
 
 
   // ==========================================
   // КАТЕГОРИЯ 6: КОНТЕЙНЕРЫ
   // ==========================================
 
- "6010001": { },
- "6020001": { },
+ "6010001": {
+    id: "6010001",
+    name: "бутылка",
+    description: "бутылка",
+    category: "container",
+    slotType: null,              
+    isBeltCompatible: false,     
+    weight: 0.5,
+    maxStack: 50,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,       
+      isTwoHanded: false,
+      combustible: false,         
+    },
+    effects: { }
+ },
+ 
+ "6020001": {
+    id: "6020001",
+    name: "канистра",
+    description: "канистра",
+    category: "container",
+    slotType: null,              
+    isBeltCompatible: false,     
+    weight: 2,
+    maxStack: 1,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,       
+      isTwoHanded: false,
+      combustible: false,         
+    },
+    effects: { } 
+ },
 
 
   // ==========================================
