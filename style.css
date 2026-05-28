@@ -321,8 +321,8 @@ body, html {
 .eq-slot[data-slot="glove-right"]  { grid-column: 1; grid-row: 1; }
 .eq-slot[data-slot="weapon-right"] { grid-column: 1; grid-row: 2; }
 .eq-slot[data-slot="helmet"]       { grid-column: 1; grid-row: 3; }
-.eq-column[data-slot="armor"]        { grid-column: 1; grid-row: 4; } /* Фикс селектора на .eq-slot ниже */
-.eq-slot[data-slot="armor"]        { grid-column: 1; grid-row: 4; }
+.eq-column[data-slot="body"]        { grid-column: 1; grid-row: 4; } /* Фикс селектора на .eq-slot ниже */
+.eq-slot[data-slot="body"]        { grid-column: 1; grid-row: 4; }
 .eq-slot[data-slot="backpack-mod"] { grid-column: 1; grid-row: 5; }
 
 /* Расстановка slots правого столбца */
