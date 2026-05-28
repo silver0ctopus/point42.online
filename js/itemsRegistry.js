@@ -7,8 +7,8 @@
  * 4-XX-XXXX: Ресурсы ()
  * 5-XX-XXXX: Расходники ()
  * 6-XX-XXXX: Контейнеры
- * 7-XX-XXXX: Сувениры
- * 8-XX-XXXX: 
+ * 7-XX-XXXX: Камни
+ * 8-XX-XXXX: Сувениры
  * 9-XX-XXXX: 
  * 10-XX-XXXX: 
   */
@@ -89,7 +89,7 @@ const ITEMS_REGISTRY = {
     name: "простая куртка",
     description: "простая куртка",
     category: "equipment",
-    slotType: "armor",          
+    slotType: "body",          
     isBeltCompatible: false,     
     weight: 1,
     maxStack: 1,                 
@@ -316,7 +316,7 @@ const ITEMS_REGISTRY = {
     name: "Комбинезон «Сталкер»",
     description: "Классическая экипировка исследователей Зоны. Хороший баланс защиты и веса.",
     category: "equipment",
-    slotType: "armor",           // Слот для торса
+    slotType: "body",           // Слот для торса
     isBeltCompatible: false,
     weight: 5.0,
     maxStack: 1,
@@ -340,9 +340,71 @@ const ITEMS_REGISTRY = {
   // КАТЕГОРИЯ 2: ОРУЖИЕ
   // ==========================================
 
-  "2010001": { }, 
-  "2020001": { },
-  "2030001": { },
+  "2010001": {
+    id: "2010001",
+    name: "ржавая труба",
+    description: "ржавая труба",
+    category: "weapon",
+    slotType: "weapon-right",    
+    isBeltCompatible: true,
+    weight: 3,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 150,
+      isTwoHanded: false,        
+      combustible: false         
+    },
+    effects: {
+      damage: 18  
+    }
+  }, 
+ 
+  "2020001": {
+    id: "2020001",
+    name: "крышка от бака",
+    description: "крышка от бака",
+    category: "weapon",
+    slotType: "weapon-left",    
+    isBeltCompatible: true,
+    weight: 3,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 150,
+      isTwoHanded: false,        
+      combustible: false         
+    },
+    effects: {
+      armor: 10  
+    }
+  },
+ 
+  "2030001": {
+    id: "2030001",
+    name: "пожарный топор",
+    description: "пожарный топор",
+    category: "weapon",
+    slotType: "weapon-right",    
+    isBeltCompatible: true,
+    weight: 3,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 150,
+      isTwoHanded: true,        
+      combustible: false         
+    },
+    effects: {
+      damage: 40  
+    } 
+  },
  
   "2019001": {
     id: "2019001",
@@ -468,9 +530,12 @@ const ITEMS_REGISTRY = {
 
 
   // ==========================================
-  // КАТЕГОРИЯ 7: СУВЕНИРЫ
+  // КАТЕГОРИЯ 7: КАМНИ
   // ==========================================
 
+  // ==========================================
+  // КАТЕГОРИЯ 8: СУВЕНИРЫ
+  // ==========================================
 
 // Экспортируем, если используем модульную систему (ES6)
 // export default ITEMS_REGISTRY;
