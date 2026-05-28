@@ -285,58 +285,8 @@ const ITEMS_REGISTRY = {
     }
   },
 
- "1019001": {
-    id: "1019001",
-    name: "Кожаный шлем «Заря»",
-    description: "Старый, пахнущий машинным маслом шлем. Защищает разве что от случайных камней.",
-    category: "equipment",
-    slotType: "helmet",          // Строго для слота головы
-    isBeltCompatible: false,     // На ремень повесить нельзя
-    weight: 0.8,
-    maxStack: 1,                 // Снаряжение не стакается
-    canTrade: true,
-    requirements: {
-      minExp: 0                  // Доступен новичкам
-    },
-    props: {
-      hasCondition: true,        // Имеет ли износ?
-      maxCondition: 100,         // Макс. прочность
-      isTwoHanded: false,
-      combustible: true,         // Кожа горит!
-      fuelTime: 15,              // Секунд горения
-      heatOutput: 3              // Выделение тепла
-    },
-    effects: {
-      armor: 5,                  // Добавляет 5 единиц брони
-      miningSpeedBonus: 0        // Нет бонуса к добыче
-    }
-  },
-  "1029001": {
-    id: "1029001",
-    name: "Комбинезон «Сталкер»",
-    description: "Классическая экипировка исследователей Зоны. Хороший баланс защиты и веса.",
-    category: "equipment",
-    slotType: "body",           // Слот для торса
-    isBeltCompatible: false,
-    weight: 5.0,
-    maxStack: 1,
-    canTrade: true,
-    requirements: {
-      minExp: 1000               // Нужно 1000 опыта, чтобы надеть
-    },
-    props: {
-      hasCondition: true,
-      maxCondition: 200,
-      isTwoHanded: false,
-      combustible: false         // Ткань пропитана огнеупором
-    },
-    effects: {
-      armor: 25,
-      radiation_resist: 15
-    }
-  },
 
-  // ==========================================
+ // ==========================================
   // КАТЕГОРИЯ 2: ОРУЖИЕ
   // ==========================================
 
@@ -406,12 +356,200 @@ const ITEMS_REGISTRY = {
     } 
   },
  
+
+
+  // ==========================================
+  // КАТЕГОРИЯ 3: ИНСТРУМЕНТЫ
+  // ==========================================
+
+  "3010001": {
+    id: "3010001",
+    name: "деревянная палка",
+    description: "деревянная палка",
+    category: "instrument",
+    slotType: "weapon-right",
+    isBeltCompatible: true,
+    weight: 1.5,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 50,
+      isTwoHanded: false,       
+      combustible: false         
+    },
+    effects: {
+      damage: 5,
+      miningSpeedBonus: 15       
+    }
+  },
+ 
+  "3010002": {
+    id: "3010002",
+    name: "острая железяка",
+    description: "острая железяка",
+    category: "instrument",
+    slotType: "weapon-right",
+    isBeltCompatible: true,
+    weight: 1,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 50,
+      isTwoHanded: false,       
+      combustible: false         
+    },
+    effects: {
+      damage: 5,
+      miningSpeedBonus: 25       
+    }
+  },
+ 
+  "3010003": {
+    id: "3010003",
+    name: "тяжелая железяка",
+    description: "тяжелая железяка",
+    category: "instrument",
+    slotType: "weapon-right",
+    isBeltCompatible: true,
+    weight: 5,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 50,
+      isTwoHanded: false,       
+      combustible: false         
+    },
+    effects: {
+      damage: 5,
+      miningSpeedBonus: 10       
+    }
+  },
+ 
+  "3020001": {
+    id: "3020001",
+    name: "Тяжелая кирка",
+    description: "Тяжелая кирка",
+    category: "instrument",
+    slotType: "weapon-right",
+    isBeltCompatible: true,
+    weight: 4.5,
+    maxStack: 1,
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,
+      maxCondition: 150,
+      isTwoHanded: true,       
+      combustible: false         
+    },
+    effects: {
+      damage: 8,
+      miningSpeedBonus: 40       
+    } 
+  },
+ 
+  // ==========================================
+  // КАТЕГОРИЯ 4: РЕСУРСЫ
+  // ==========================================
+
+  "4010001": { }, 
+  "4010002": { },
+  "4010003": { },
+  "4010004": { },
+  "4010005": { },
+ 
+
+
+
+  // ==========================================
+  // КАТЕГОРИЯ 5: РАСХОДНИКИ
+  // ==========================================
+
+ "5010001": { },
+
+
+  // ==========================================
+  // КАТЕГОРИЯ 6: КОНТЕЙНЕРЫ
+  // ==========================================
+
+ "6010001": { },
+ "6020001": { },
+
+
+  // ==========================================
+  // КАТЕГОРИЯ 7: КАМНИ
+  // ==========================================
+
+  // ==========================================
+  // КАТЕГОРИЯ 8: СУВЕНИРЫ
+  // ==========================================
+
+// Экспортируем, если используем модульную систему (ES6)
+// export default ITEMS_REGISTRY;
+
+
+ "1019001": {
+    id: "1019001",
+    name: "Кожаный шлем «Заря»",
+    description: "Старый, пахнущий машинным маслом шлем. Защищает разве что от случайных камней.",
+    category: "equipment",
+    slotType: "helmet",          // Строго для слота головы
+    isBeltCompatible: false,     // На ремень повесить нельзя
+    weight: 0.8,
+    maxStack: 1,                 // Снаряжение не стакается
+    canTrade: true,
+    requirements: {
+      minExp: 0                  // Доступен новичкам
+    },
+    props: {
+      hasCondition: true,        // Имеет ли износ?
+      maxCondition: 100,         // Макс. прочность
+      isTwoHanded: false,
+      combustible: true,         // Кожа горит!
+      fuelTime: 15,              // Секунд горения
+      heatOutput: 3              // Выделение тепла
+    },
+    effects: {
+      armor: 5,                  // Добавляет 5 единиц брони
+      miningSpeedBonus: 0        // Нет бонуса к добыче
+    }
+  },
+  "1029001": {
+    id: "1029001",
+    name: "Комбинезон «Сталкер»",
+    description: "Классическая экипировка исследователей Зоны. Хороший баланс защиты и веса.",
+    category: "equipment",
+    slotType: "body",           // Слот для торса
+    isBeltCompatible: false,
+    weight: 5.0,
+    maxStack: 1,
+    canTrade: true,
+    requirements: {
+      minExp: 1000               // Нужно 1000 опыта, чтобы надеть
+    },
+    props: {
+      hasCondition: true,
+      maxCondition: 200,
+      isTwoHanded: false,
+      combustible: false         // Ткань пропитана огнеупором
+    },
+    effects: {
+      armor: 25,
+      radiation_resist: 15
+    }
+  },
   "2019001": {
     id: "2019001",
     name: "Тяжелая кирка",
     description: "Надежный инструмент для колки породы. Из-за веса приходится держать двумя руками.",
     category: "weapon",
-    slotType: "weapon-main",     // Занимает основной слот оружия
+    slotType: "weapon-right",     // Занимает основной слот оружия
     isBeltCompatible: false,
     weight: 4.5,
     maxStack: 1,
@@ -428,16 +566,6 @@ const ITEMS_REGISTRY = {
       miningSpeedBonus: 40       // Сокращает время добычи руды на 40%!
     }
   },
-
-  // ==========================================
-  // КАТЕГОРИЯ 3: ИНСТРУМЕНТЫ
-  // ==========================================
-
-  "3010001": { }, 
-  "3010002": { },
-  "3010003": { },
-  "3020001": { },
- 
   "3019001": {
     id: "3019001",
     name: "Батон хлеба",
@@ -482,18 +610,7 @@ const ITEMS_REGISTRY = {
       hungerRestore: -10         // Побочный эффект: вызывает сильное чувство голода
     }
   },
-
-  // ==========================================
-  // КАТЕГОРИЯ 4: РЕСУРСЫ
-  // ==========================================
-
-  "4010001": { }, 
-  "4010002": { },
-  "4010003": { },
-  "4010004": { },
-  "4010005": { },
- 
-  "4029001": {
+   "4029001": {
     id: "4029001",
     name: "Медная руда",
     description: "Тяжелый кусок необработанной породы с прожилками меди.",
@@ -512,30 +629,3 @@ const ITEMS_REGISTRY = {
     effects: {}                  // У сырья нет мгновенных эффектов
   }
 };
-
-
-  // ==========================================
-  // КАТЕГОРИЯ 5: РАСХОДНИКИ
-  // ==========================================
-
- "5010001": { },
-
-
-  // ==========================================
-  // КАТЕГОРИЯ 6: КОНТЕЙНЕРЫ
-  // ==========================================
-
- "6010001": { },
- "6020001": { },
-
-
-  // ==========================================
-  // КАТЕГОРИЯ 7: КАМНИ
-  // ==========================================
-
-  // ==========================================
-  // КАТЕГОРИЯ 8: СУВЕНИРЫ
-  // ==========================================
-
-// Экспортируем, если используем модульную систему (ES6)
-// export default ITEMS_REGISTRY;
