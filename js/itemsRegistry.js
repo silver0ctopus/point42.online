@@ -369,15 +369,16 @@ const ITEMS_REGISTRY = {
     category: "instrument",
     slotType: "weapon-right",
     isBeltCompatible: true,
-    weight: 1.5,
-    maxStack: 1,
+    weight: 0.5,
+    maxStack: 50,
     canTrade: true,
     requirements: { minExp: 0 },
     props: {
       hasCondition: true,
       maxCondition: 50,
       isTwoHanded: false,       
-      combustible: false         
+      combustible: true,
+      heatOutput: 3
     },
     effects: {
       damage: 5,
@@ -393,7 +394,7 @@ const ITEMS_REGISTRY = {
     slotType: "weapon-right",
     isBeltCompatible: true,
     weight: 1,
-    maxStack: 1,
+    maxStack: 50,
     canTrade: true,
     requirements: { minExp: 0 },
     props: {
@@ -416,7 +417,7 @@ const ITEMS_REGISTRY = {
     slotType: "weapon-right",
     isBeltCompatible: true,
     weight: 5,
-    maxStack: 1,
+    maxStack: 10,
     canTrade: true,
     requirements: { minExp: 0 },
     props: {
@@ -458,11 +459,103 @@ const ITEMS_REGISTRY = {
   // КАТЕГОРИЯ 4: РЕСУРСЫ
   // ==========================================
 
-  "4010001": { }, 
-  "4010002": { },
-  "4010003": { },
-  "4010004": { },
-  "4010005": { },
+  "4010001": {
+    id: "4010001",
+    name: "доска",
+    description: "доска",
+    category: "resource",
+    slotType: null,
+    isBeltCompatible: false,
+    weight: 0.5,
+    maxStack: 50,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,
+      isTwoHanded: false,
+      combustible: true,
+      heatOutput: 10
+    },
+    effects: {}
+  },
+ 
+  "4010002": {
+    id: "4010002",
+    name: "тряпка",
+    description: "тряпка",
+    category: "resource",
+    slotType: null,
+    isBeltCompatible: false,
+    weight: 0.2,
+    maxStack: 100,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,
+      isTwoHanded: false,
+      combustible: true,
+      heatOutput: 2
+    },
+    effects: {}
+  },
+ 
+  "4010003": {
+    id: "4010003",
+    name: "провод",
+    description: "провод",
+    category: "resource",
+    slotType: null,
+    isBeltCompatible: false,
+    weight: 0.1,
+    maxStack: 100,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {}
+  },
+ 
+  "4010004": {
+   id: "4010004",
+    name: "кусок резины",
+    description: "кусок резины",
+    category: "resource",
+    slotType: null,
+    isBeltCompatible: false,
+    weight: 1,
+    maxStack: 50,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,
+      isTwoHanded: false,
+      combustible: true,
+      heatOutput: 5
+    },
+    effects: {}
+  },
+ 
+  "4010005": {
+    id: "4010005",
+    name: "алюминиевая банка",
+    description: "алюминиевая банка",
+    category: "resource",
+    slotType: null,
+    isBeltCompatible: false,
+    weight: 0.1,
+    maxStack: 100,                
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: false,
+      isTwoHanded: false,
+      combustible: false
+    },
+    effects: {}
+  },
  
 
 
@@ -627,5 +720,4 @@ const ITEMS_REGISTRY = {
       combustible: false         // Камень не горит
     },
     effects: {}                  // У сырья нет мгновенных эффектов
-  }
 };
