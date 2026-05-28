@@ -31,8 +31,8 @@ function injectPDA() {
     <div class="eq-slot" data-slot="glove-right">Перчатка П</div>
     <div class="eq-slot" data-slot="weapon-right">Оружие П</div>
     <div class="eq-slot" data-slot="helmet">Шлем</div>
-    <div class="eq-slot" data-slot="armor">Куртка</div>
-    <div class="eq-slot" data-slot="backpack-mod">Разгрузка</div>
+    <div class="eq-slot" data-slot="body">Куртка</div>
+    <div class="eq-slot" data-slot="backpack">Разгрузка</div>
 
     <!-- Столбцы 2 и 3 (Центр): Аватарка персонажа -->
     <div class="pda-avatar-container">
