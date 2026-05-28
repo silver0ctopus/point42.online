@@ -17,17 +17,152 @@ const ITEMS_REGISTRY = {
   // ==========================================
   // КАТЕГОРИЯ 1: ЭКИПИРОВКА
   // ==========================================
-  "1010001": { }, 
-  "1020001": { },
-  "1030001": { },
-  "1040001": { },
-  "1050001": { },
-  "1060001": { },
+  "1010001": {
+    id: "1010001",
+    name: "медная правая перчатка",
+    description: "медная правая перчатка",
+    category: "equipment",
+    slotType: "glove-right",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false        
+    },
+    effects: {
+      armor: 1
+    }
+  }, 
+ 
+  "1020001": {
+    id: "1020001",
+    name: "медная левая перчатка",
+    description: "медная левая перчатка",
+    category: "equipment",
+    slotType: "glove-left",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: false         
+    },
+    effects: {
+      armor: 1
+    }
+  },
+ 
+  "1030001": {
+    id: "1030001",
+    name: "простая кепка",
+    description: "простая кепка",
+    category: "equipment",
+    slotType: "helmet",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: true, 
+      heatOutput: 3
+    },
+    effects: {
+      armor: 1
+    }
+  },
+ 
+  "1040001": {
+    id: "1040001",
+    name: "простая куртка",
+    description: "простая куртка",
+    category: "equipment",
+    slotType: "armor",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: true, 
+      heatOutput: 3
+    },
+    effects: {
+      armor: 1
+    }
+  },
+ 
+  "1050001": {
+    id: "1050001",
+    name: "простые штаны",
+    description: "простые штаны",
+    category: "equipment",
+    slotType: "pants",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: true, 
+      heatOutput: 3
+    },
+    effects: {
+      armor: 1
+    }
+  },
+ 
+  "1060001": {
+    id: "1060001",
+    name: "простые ботинки",
+    description: "простые ботинки",
+    category: "equipment",
+    slotType: "boots",          
+    isBeltCompatible: false,     
+    weight: 1,
+    maxStack: 1,                 
+    canTrade: true,
+    requirements: { minExp: 0 },
+    props: {
+      hasCondition: true,        
+      maxCondition: 100,        
+      isTwoHanded: false,
+      combustible: true, 
+      heatOutput: 3
+    },
+    effects: {
+      armor: 1
+    }
+  },
+ 
   "1070001": { },
+ 
   "1070002": { },
+ 
   "1070003": { },
+ 
   "1070004": { },
+ 
   "1080001": { },
+ 
   "1080002": { },
 
  "1019001": {
